@@ -1,0 +1,61 @@
+<section class="mainLog-in">
+
+ <img src="/images/Logo.svg" class="logo" />
+
+  <div class="inputsBlock">
+
+    <div class="buttons">
+      <button 
+        (click)="setTab('login')"
+        [class.active]="activeTab === 'login'">
+        Log in
+      </button>
+
+      <button 
+        (click)="setTab('signup')"
+        [class.active]="activeTab === 'signup'">
+        Sign Up
+      </button>
+    </div>
+
+    <div class="forms">
+
+      <h1 *ngIf="activeTab === 'login'">Welcome!</h1>
+
+<div class="forms">
+
+  <!-- LOGIN -->
+  <form *ngIf="activeTab === 'login'" class="login-form" (ngSubmit)="login()" [class.error]="inputError">
+
+    <label>Email</label>
+    <input type="email" [(ngModel)]="email" name="email" required />
+
+    <label>Password</label>
+    <input type="password" [(ngModel)]="password" name="password" required [class.error]="inputError"/>
+
+    <button type="submit">Im back!</button>
+  </form>
+
+  <!-- SIGNUP -->
+  <form *ngIf="activeTab === 'signup'" class="signup-form" (ngSubmit)="signup()">
+
+    <label>Username</label>
+    <input type="text" [(ngModel)]="name" name="name" required />
+
+    <label>Email</label>
+    <input type="email" [(ngModel)]="signupEmail" name="signupEmail" required />
+
+    <label>Password</label>
+    <input type="password" [(ngModel)]="signupPassword" name="signupPassword" required />
+
+    <button type="submit">Sign up</button>
+  </form>
+
+</div>
+    </div>
+  </div>
+
+<div class="toast" *ngIf="errorMessage" [class.hide]="toastHidden">
+  {{ errorMessage }}
+</div>
+</section>
