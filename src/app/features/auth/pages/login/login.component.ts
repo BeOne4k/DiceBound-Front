@@ -27,7 +27,7 @@ export class LoginComponent {
 
       this.authService.register(dto).subscribe({
         next: (res) => {
-          console.log('✅ REGISTER SUCCESS:', res);
+          console.log(' REGISTER SUCCESS:', res);
 
           // можно сразу переключить на логин
           this.setTab('login');
@@ -38,7 +38,7 @@ export class LoginComponent {
           this.signupPassword = '';
         },
         error: (err) => {
-          console.error('❌ REGISTER ERROR:', err);
+          console.error(' REGISTER ERROR:', err);
         }
       });
     }
@@ -61,18 +61,16 @@ login() {
       if (res?.token) {
         this.authService.saveToken(res.token);
 
-        // 👉 переход после логина
         this.router.navigate(['/characters']);
       }
     },
 
     error: (err) => {
-      console.error('❌ LOGIN ERROR:', err);
+      console.error(' LOGIN ERROR:', err);
 
       this.inputError = true;
       this.showError('Invalid credentials');
 
-      // убираем красную подсветку через 2 сек (не 5, это слишком долго)
       setTimeout(() => {
         this.inputError = false;
       }, 5000);
