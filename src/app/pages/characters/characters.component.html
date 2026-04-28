@@ -1,5 +1,35 @@
 <section class="mainCharacters">
-    <div class="charactersList">
-        <h1>Characters page works</h1>
+  <img src="/images/Logo.svg" class="logo" />
+  <div class="charactersList">
+    <button class="close-btn">×</button>
+    <h1>Your Characters:</h1>
+
+    <div class="characters-scroll">
+      <div *ngIf="loading" class="loading-text">Loading...</div>
+      <div *ngIf="error" class="error-text">{{ error }}</div>
+
+      <div *ngFor="let char of characters; let i = index"
+           class="character-item"
+           [class.active]="i === 0">
+        <div class="char-info">
+          <span class="char-name">{{ char.name }}</span>
+          <span class="char-race">Race: {{ char.raceName }}</span>
+        </div>
+        <div class="char-stats">
+          <span>Level {{ char.level }}</span>
+          <span class="divider">|</span>
+          <span>HP: 100</span>
+        </div>
+      </div>
+
+      <div *ngIf="!loading && characters.length === 0 && !error" class="empty-text">
+        No characters yet. Create one!
+      </div>
+
+      <div class="character-item create-item" (click)="goToCreate()">
+        <span class="create-label">Create new</span>
+        <span class="create-icon">+</span>
+      </div>
     </div>
+  </div>
 </section>

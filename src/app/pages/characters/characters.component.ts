@@ -1,11 +1,39 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+import { CharacterService } from '../../core/services/character-service';
 
 @Component({
+  standalone: true,
   selector: 'app-characters',
-  imports: [],
   templateUrl: './characters.component.html',
-  styleUrl: './characters.component.scss',
+  styleUrls: ['./characters.component.scss'],
+  imports: [CommonModule]
 })
-export class Characters {
+export class CharactersComponent implements OnInit {
 
+  characters: any[] = [];
+  loading = true;
+  error: string | null = null;
+
+  constructor(
+    private characterService: CharacterService,
+    private router: Router
+  ) {}
+
+ngOnInit() {
+  this.characterService.getMyCharacters().subscribe({
+    next: (res: any) => {
+      this.characters = res;
+      this.loading = false;
+    },
+    error: () => {
+      this.error = 'Failed to load characters';
+      this.loading = false;
+    }
+  });
+}
+  goToCreate() {
+    this.router.navigate(['/characters/create']);
+  }
 }

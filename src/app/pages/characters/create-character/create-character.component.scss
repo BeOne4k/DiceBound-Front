@@ -1,0 +1,136 @@
+.mainCreate {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  .logo {
+    margin-bottom: 28px;
+  }
+
+  .createCard {
+    width: 380px;
+    background: #fff;
+    border-radius: 16px;
+    padding: 36px 36px 32px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    h1 {
+      font-size: 22px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 28px;
+      background: linear-gradient(to top, #516B3E, #74975A);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-align: center;
+    }
+
+    .field {
+      width: 100%;
+      margin-bottom: 18px;
+
+      label {
+        display: block;
+        font-size: 12px;
+        color: #888;
+        margin-bottom: 6px;
+        font-style: italic;
+      }
+
+      input {
+        width: 100%;
+        padding: 10px 14px;
+        border: 1.5px solid #ddd;
+        border-radius: 8px;
+        font-size: 15px;
+        outline: none;
+        box-sizing: border-box;
+        transition: border-color 0.2s;
+
+        &:focus {
+          border-color: #74975A;
+        }
+
+        &.input-error {
+          border-color: #e74c3c;
+        }
+      }
+
+      .select-wrapper {
+        position: relative;
+
+        select {
+          width: 100%;
+          padding: 10px 36px 10px 14px;
+          border: 1.5px solid #ddd;
+          border-radius: 8px;
+          font-size: 15px;
+          outline: none;
+          appearance: none;
+          background: #fff;
+          cursor: pointer;
+          box-sizing: border-box;
+          color: #444;
+          transition: border-color 0.2s;
+
+          &:focus {
+            border-color: #74975A;
+          }
+
+          &.input-error {
+            border-color: #e74c3c;
+          }
+        }
+
+        .select-arrow {
+          position: absolute;
+          right: 12px;
+          top: 50%;
+          transform: translateY(-50%);
+          color: #888;
+          pointer-events: none;
+          font-size: 14px;
+        }
+      }
+    }
+
+    .error-msg {
+      color: #e74c3c;
+      font-size: 13px;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    .btn-create {
+      width: 60%;
+      padding: 13px;
+      background: linear-gradient(to bottom, #74975A, #516B3E);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: opacity 0.2s;
+
+      &:hover:not(:disabled) {
+        opacity: 0.9;
+      }
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+    }
+  }
+}

@@ -58,8 +58,9 @@ login() {
     next: (res) => {
       console.log('✅ LOGIN SUCCESS:', res);
 
-      if (res?.token) {
-        this.authService.saveToken(res.token);
+      const token = res?.token ?? res?.objectToken;
+      if (token) {
+      this.authService.saveToken(token);
 
         this.router.navigate(['/characters']);
       }

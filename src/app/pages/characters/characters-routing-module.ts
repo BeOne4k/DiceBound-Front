@@ -1,12 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { Characters } from './characters.component';
+import { CharactersComponent } from './characters.component';
+import { CreateCharacterComponent } from './create-character/create-character.component';
 
 const routes: Routes = [
-  {
-    path: '',
-    component: Characters
-  }
+  { path: '', component: CharactersComponent },
+  { path: 'create', component: CreateCharacterComponent }
 ];
 
 @NgModule({
