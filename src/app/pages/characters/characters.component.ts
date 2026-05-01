@@ -21,18 +21,24 @@ export class CharactersComponent implements OnInit {
     private router: Router
   ) {}
 
-ngOnInit() {
-  this.characterService.getMyCharacters().subscribe({
-    next: (res: any) => {
-      this.characters = res;
-      this.loading = false;
-    },
-    error: () => {
-      this.error = 'Failed to load characters';
-      this.loading = false;
-    }
-  });
-}
+  ngOnInit() {
+    this.characterService.getMyCharacters().subscribe({
+      next: (res: any) => {
+        this.characters = res;
+        this.loading = false;
+      },
+      error: () => {
+        this.error = 'Failed to load characters';
+        this.loading = false;
+      }
+    });
+  }
+
+  selectCharacter(char: any) {
+    localStorage.setItem('selectedCharacter', JSON.stringify(char));
+    this.router.navigate(['/home']);
+  }
+
   goToCreate() {
     this.router.navigate(['/characters/create']);
   }

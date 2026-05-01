@@ -10,7 +10,8 @@
 
       <div *ngFor="let char of characters; let i = index"
            class="character-item"
-           [class.active]="i === 0">
+           [class.active]="i === 0"
+           (click)="selectCharacter(char)">
         <div class="char-info">
           <span class="char-name">{{ char.name }}</span>
           <span class="char-race">Race: {{ char.raceName }}</span>
