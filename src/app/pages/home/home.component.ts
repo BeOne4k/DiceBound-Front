@@ -49,7 +49,6 @@ export class HomeComponent implements OnInit {
         this.loadingMissions = false;
       },
       error: () => {
-        // Fallback placeholder missions
         this.missions = [
           { id: '1', name: 'Mission with Laughables', minLevel: 1, difficulty: 2, rewardExperience: 100 },
           { id: '2', name: 'Laughables 2', minLevel: 2, difficulty: 3, rewardExperience: 200 },
@@ -63,6 +62,10 @@ export class HomeComponent implements OnInit {
 
   goBackToCharacters() {
     this.router.navigate(['/characters']);
+  }
+
+  goToTavern() {
+    this.router.navigate(['/tavern']);
   }
 
   getDifficultyLabel(difficulty: number): string {
