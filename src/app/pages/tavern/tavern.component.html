@@ -4,24 +4,20 @@
 
   <!-- Top Bar (same as home) -->
   <header class="top-bar">
-    <div class="char-stats" title="Character stats">
+    <div class="char-stats" title="Character stats" (click)="goBackToCharacters()">
       <div class="stat-item">
-        <span class="stat-icon">🧙</span>
         <span class="stat-label">{{ character?.name }}</span>
       </div>
       <div class="stat-divider"></div>
       <div class="stat-item">
-        <span class="stat-icon">⭐</span>
         <span class="stat-label">Level: {{ character?.level }}</span>
       </div>
       <div class="stat-divider"></div>
       <div class="stat-item">
-        <span class="stat-icon">❤️</span>
         <span class="stat-label">HP: 100/100</span>
       </div>
       <div class="stat-divider"></div>
       <div class="stat-item">
-        <span class="stat-icon">🏹</span>
         <span class="stat-label">Race: {{ character?.raceName }}</span>
       </div>
     </div>
@@ -36,7 +32,6 @@
     <!-- Left: visitors + back button -->
     <aside class="sidebar">
       <div class="tavern-title">
-        <span class="tavern-icon">🍺</span>
         <span class="tavern-label">Tavern</span>
       </div>
 
@@ -54,7 +49,6 @@
         <button class="back-btn" (click)="goHome()">
           <span class="back-icon">‹</span>
           <span class="back-label">Home Page</span>
-          <span class="back-icon2">🏠</span>
         </button>
       </div>
     </aside>

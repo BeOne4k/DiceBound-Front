@@ -73,15 +73,17 @@
       transition: background 0.15s;
 
       &.active {
-        background: #516B3E;
-        color: #fff;
+            background: linear-gradient(to top,#74975A, #516B3E );
 
-        .char-name, .char-race {
-          color: #fff;
+        .char-name,
+        .char-race,
+        .char-stats,
+        .char-stats span {
+          color: #fff !important;
         }
 
-        .char-stats {
-          color: #d4e8c6;
+        .char-stats .divider {
+          opacity: 0.7;
         }
       }
 
@@ -100,8 +102,9 @@
 
         .create-label {
           font-size: 14px;
-          color: #666;
+          color: #1e4700;
           font-style: italic;
+          font-weight: 600;
         }
 
         .create-icon {
@@ -125,7 +128,6 @@
 
         .char-race {
           font-size: 12px;
-          color: #666;
           text-transform: capitalize;
         }
       }

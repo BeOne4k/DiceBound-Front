@@ -7,22 +7,18 @@
     <!-- Character stats (clickable → back to character selection) -->
     <div class="char-stats" (click)="goBackToCharacters()" title="Back to character selection">
       <div class="stat-item">
-        <span class="stat-icon">🧙</span>
         <span class="stat-label">{{ character?.name }}</span>
       </div>
       <div class="stat-divider"></div>
       <div class="stat-item">
-        <span class="stat-icon">⭐</span>
         <span class="stat-label">Level: {{ character?.level }}</span>
       </div>
       <div class="stat-divider"></div>
       <div class="stat-item">
-        <span class="stat-icon">❤️</span>
         <span class="stat-label">HP: 100/100</span>
       </div>
       <div class="stat-divider"></div>
       <div class="stat-item">
-        <span class="stat-icon">🏹</span>
         <span class="stat-label">Race: {{ character?.raceName }}</span>
       </div>
     </div>
@@ -83,12 +79,10 @@
     <aside class="other-panel">
     <h2 class="panel-title missions-title"> Other</h2>
       <div class="other-btn" (click)="goToTavern()">
-        <span class="other-icon">🍺</span>
         <span class="other-label">Tavern</span>
         <span class="other-arrow">›</span>
       </div>
       <div class="other-btn">
-        <span class="other-icon">⚔️</span>
         <span class="other-label">Inventory</span>
         <span class="other-arrow">›</span>
       </div>

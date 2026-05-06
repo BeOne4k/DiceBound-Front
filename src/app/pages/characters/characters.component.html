@@ -1,7 +1,6 @@
 <section class="mainCharacters">
   <img src="/images/Logo.svg" class="logo" />
   <div class="charactersList">
-    <button class="close-btn">×</button>
     <h1>Your Characters:</h1>
 
     <div class="characters-scroll">
@@ -10,7 +9,7 @@
 
       <div *ngFor="let char of characters; let i = index"
            class="character-item"
-           [class.active]="i === 0"
+           [class.active]="selectedCharacter?.id === char.id"
            (click)="selectCharacter(char)">
         <div class="char-info">
           <span class="char-name">{{ char.name }}</span>
@@ -19,7 +18,7 @@
         <div class="char-stats">
           <span>Level {{ char.level }}</span>
           <span class="divider">|</span>
-          <span>HP: 100</span>
+          <span>HP: {{ char.hp }}</span>
         </div>
       </div>
 

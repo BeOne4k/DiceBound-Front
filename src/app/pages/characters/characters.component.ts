@@ -16,28 +16,39 @@ export class CharactersComponent implements OnInit {
   loading = true;
   error: string | null = null;
 
+  selectedCharacter: any = null;
+
   constructor(
     private characterService: CharacterService,
     private router: Router
   ) {}
 
-  ngOnInit() {
-    this.characterService.getMyCharacters().subscribe({
-      next: (res: any) => {
-        this.characters = res;
-        this.loading = false;
-      },
-      error: () => {
-        this.error = 'Failed to load characters';
-        this.loading = false;
-      }
-    });
+ngOnInit() {
+  const saved = localStorage.getItem('selectedCharacter');
+
+  if (saved) {
+    this.selectedCharacter = JSON.parse(saved);
   }
 
-  selectCharacter(char: any) {
-    localStorage.setItem('selectedCharacter', JSON.stringify(char));
-    this.router.navigate(['/home']);
-  }
+  this.characterService.getMyCharacters().subscribe({
+    next: (res: any) => {
+      this.characters = res;
+      this.loading = false;
+    },
+    error: () => {
+      this.error = 'Failed to load characters';
+      this.loading = false;
+    }
+  });
+}
+
+selectCharacter(char: any) {
+  this.selectedCharacter = char;
+
+  localStorage.setItem('selectedCharacter', JSON.stringify(char));
+
+  this.router.navigate(['/home']);
+}
 
   goToCreate() {
     this.router.navigate(['/characters/create']);

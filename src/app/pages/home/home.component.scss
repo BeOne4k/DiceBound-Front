@@ -109,7 +109,7 @@ $scrollbar-thumb: #c8b8a2;
   box-sizing: border-box;
   background: rgba(255, 255, 255, 1);
   border-radius: 16px;
-  height: 70%;
+  height: 10%;
 }
 
 // ── SHARED PANEL ──────────────────────────────────
@@ -122,7 +122,7 @@ $scrollbar-thumb: #c8b8a2;
   min-height: 0;
   backdrop-filter: blur(4px);
   border: 1px solid rgba(255, 255, 255, 0.5);
-  height: 50%;
+  height: 500px;
   margin-bottom: 18px;
 }
 
@@ -348,5 +348,23 @@ $scrollbar-thumb: #c8b8a2;
   justify-content: center;
   h2{
     margin: 0;
+  }
+}
+
+.char-stats {
+  .stat-item:nth-child(1) .stat-label {
+    color: #74975A; // имя — зелёный
+  }
+
+  .stat-item:nth-child(3) .stat-label {
+    color: #D8A326; // уровень — жёлтый
+  }
+
+  .stat-item:nth-child(5) .stat-label {
+    color: #F76C6C; // HP — красный
+  }
+
+    .stat-item:nth-child(7) .stat-label {
+    color: #828AD0; // HP — красный
   }
 }

@@ -70,6 +70,10 @@ export class TavernComponent implements OnInit, OnDestroy, AfterViewChecked {
     }
   }
 
+    goBackToCharacters() {
+    this.router.navigate(['/characters']);
+  }
+
   // ── MESSAGES ──────────────────────────────────────
 
   sendMessage(): void {
