@@ -68,6 +68,10 @@ export class HomeComponent implements OnInit {
     this.router.navigate(['/tavern']);
   }
 
+  goToMission(mission: any) {
+    this.router.navigate(['/mission', mission.id]);
+  }
+
   getDifficultyLabel(difficulty: number): string {
     const labels: { [key: number]: string } = {
       1: 'Easy', 2: 'Normal', 3: 'Hard', 4: 'Elite', 5: 'Legendary'

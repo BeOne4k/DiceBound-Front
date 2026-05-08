@@ -50,4 +50,10 @@ export const routes: Routes = [
       import('./pages/tavern/tavern.component')
         .then(m => m.TavernComponent)
   },
+  {
+    path: 'mission/:id',
+    loadComponent: () =>
+      import('./pages/mission-battle/mission-battle.component')
+        .then(m => m.MissionBattleComponent)
+  },
 ];

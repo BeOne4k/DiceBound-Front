@@ -1,0 +1,151 @@
+<div class="battle-wrapper" [class.death-filter]="deathOverlay">
+  <!-- Background -->
+  <div class="bg-overlay"></div>
+
+  <!-- Death overlay -->
+  <div class="death-screen" *ngIf="deathOverlay">
+    <div class="death-text">YOU DIED</div>
+    <div class="death-sub">Returning to character selection...</div>
+  </div>
+
+  <!-- Top Bar -->
+  <header class="top-bar">
+    <div class="char-stats" (click)="goBackToCharacters()" title="Back to character selection">
+      <div class="stat-item">
+        <span class="stat-label stat-name">{{ character?.name }}</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-label stat-level">Level: {{ character?.level }}</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-label stat-hp">HP: {{ charCurrentHp }}/{{ charMaxHp }}</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-label stat-race">Race: {{ savedRaceName || character?.raceName }}</span>
+      </div>
+    </div>
+    <div class="logo-wrap">
+      <img src="/images/Logo long.svg" class="logo-long" alt="DiceBound" />
+    </div>
+  </header>
+
+  <!-- Main content: same size as tavern/home content -->
+  <main class="battle-content">
+
+    <!-- LEFT: players + back -->
+    <aside class="sidebar">
+      <div class="boss-title-block">
+        <span class="section-label">Boss Battle</span>
+        <span class="boss-sword">✕</span>
+      </div>
+
+      <div class="players-section">
+        <p class="players-heading">Players in battle:</p>
+        <ul class="players-list">
+          <li *ngFor="let p of players" class="player-item">
+            <span class="player-dot"></span>
+            <span [class.player-me]="p === character?.name">{{ p }}</span>
+          </li>
+          <li *ngIf="players.length === 0" class="player-item player-empty">
+            <span class="player-dot"></span>
+            <span>{{ character?.name }}</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-footer">
+        <button class="back-btn" (click)="goHome()">
+          <span class="back-icon">‹</span>
+          <span class="back-label">Home Page</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- CENTER: chat -->
+    <section class="chat-panel">
+      <!-- Boss header strip -->
+      <div class="boss-header">
+        <div class="boss-header-left">
+          <span class="boss-mission-label">{{ mission?.name || 'Loading...' }}</span>
+          <span class="boss-status-badge" [class.confused]="bossStatus === 'Confused'"
+                [class.staggered]="bossStatus === 'Staggered'"
+                [class.defeated]="bossStatus === 'Defeated'">
+            Status: {{ bossStatus || '...' }}
+          </span>
+        </div>
+        <div class="boss-header-right">
+          <div class="boss-hp-info">
+            <span class="boss-hp-label">Current HP: {{ bossCurrentHp }}/{{ bossMaxHp }}</span>
+            <div class="boss-hp-bar">
+              <div class="boss-hp-fill" [style.width.%]="bossHpPercent"
+                   [class.hp-low]="bossHpPercent < 30"
+                   [class.hp-mid]="bossHpPercent >= 30 && bossHpPercent < 60"></div>
+            </div>
+          </div>
+          <span class="boss-name-label">{{ boss?.name || '...' }}</span>
+        </div>
+      </div>
+
+      <!-- Victory banner -->
+      <div class="victory-banner" *ngIf="battleFinished && isWin && !isDead">
+        <span class="victory-icon">⚔️</span>
+        <span class="victory-text">VICTORY! +{{ gainedXp }} XP</span>
+        <span class="victory-icon">⚔️</span>
+      </div>
+
+      <!-- Loading state -->
+      <div class="battle-loading" *ngIf="!battleStarted">
+        <span class="loading-dots">Entering battle<span>.</span><span>.</span><span>.</span></span>
+      </div>
+
+      <!-- Chat messages -->
+      <div class="chat-messages" #chatBox>
+        <div *ngFor="let msg of visibleMessages"
+             class="chat-message"
+             [class.system-msg]="msg.isSystem"
+             [class.death-msg]="msg.isDeath">
+          <span class="msg-author">{{ msg.author }}</span>
+          <span class="msg-text">{{ msg.text }}</span>
+        </div>
+        <div *ngIf="visibleMessages.length === 0 && battleStarted" class="chat-empty">
+          Battle has begun. Chat with your party!
+        </div>
+      </div>
+
+      <div class="chat-input-row" [class.disabled-input]="isDead">
+        <input
+          class="chat-input"
+          [(ngModel)]="inputText"
+          placeholder="{{ isDead ? 'You are dead...' : '|...' }}"
+          (keydown.enter)="sendMessage()"
+          maxlength="300"
+          [disabled]="isDead"
+        />
+        <button class="send-btn" (click)="sendMessage()" [disabled]="isDead">›</button>
+      </div>
+    </section>
+
+    <!-- RIGHT: battle log -->
+    <aside class="battle-log-panel">
+      <div class="log-header">
+        <span class="log-title">Battle Log</span>
+      </div>
+
+      <div class="log-list">
+        <div *ngIf="visibleLogs.length === 0" class="log-empty">
+          Waiting for combat...
+        </div>
+        <div *ngFor="let line of visibleLogs"
+             class="log-entry"
+             [ngClass]="getLogClass(line)">
+          <span class="log-bullet">•</span>
+          <span class="log-text">{{ line }}</span>
+        </div>
+      </div>
+    </aside>
+
+  </main>
+</div>

@@ -15,7 +15,7 @@
       </div>
       <div class="stat-divider"></div>
       <div class="stat-item">
-        <span class="stat-label">HP: 100/100</span>
+        <span class="stat-label">HP: {{ character?.hp ?? character?.HP ?? '?' }}/{{ character?.hp ?? character?.HP ?? '?' }}</span>
       </div>
       <div class="stat-divider"></div>
       <div class="stat-item">
@@ -40,7 +40,7 @@
       <div class="scroll-list">
         <div *ngIf="loadingMissions" class="list-loading">Loading missions...</div>
 
-        <div *ngFor="let mission of missions" class="list-item mission-item">
+        <div *ngFor="let mission of missions" class="list-item mission-item" (click)="goToMission(mission)">
           <div class="item-header">
             <span class="item-name">{{ mission.name }}</span>
           </div>
