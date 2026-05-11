@@ -34,7 +34,6 @@
       <button class="home-btn" (click)="goHome()">
         <span class="home-icon">‹</span>
         <span>Home Page</span>
-        <span class="home-house">⌂</span>
       </button>
     </div>
 
@@ -68,7 +67,8 @@
       <!-- Item rows -->
       <div class="table-row"
            *ngFor="let item of items; let odd = odd"
-           [class.row-odd]="odd">
+           [class.row-odd]="odd"
+           (contextmenu)="onRowRightClick($event, item)">
 
         <div class="col-item">
           <span class="item-name">{{ item.name || item.Name }}</span>
@@ -102,4 +102,18 @@
     </div>
 
   </main>
+
+<!-- Context menu -->
+<div class="ctx-menu"
+     *ngIf="ctxVisible"
+     [style.left.px]="ctxX"
+     [style.top.px]="ctxY"
+     (click)="$event.stopPropagation()">
+  <div class="ctx-item-name">{{ ctxItem?.name || ctxItem?.Name }}</div>
+  <div class="ctx-divider"></div>
+  <button class="ctx-btn ctx-delete" (click)="deleteItem()">
+    <span>🗑</span> Remove from inventory
+  </button>
+</div>
+
 </div>

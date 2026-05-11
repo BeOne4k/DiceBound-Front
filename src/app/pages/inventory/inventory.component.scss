@@ -16,8 +16,19 @@ $scrollbar:      #c8b8a2;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: url('/images/mainbg.webp') center/cover no-repeat;
   font-family: 'Cinzel', 'Palatino Linotype', serif;
+  overflow: hidden;
+}
+
+/* фон слой */
+.inv-wrapper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('/images/invbg.jpg') center/cover no-repeat;
+  filter: blur(3px);
+  transform: scale(1.1);
+  z-index: -1;
 }
 
 .bg-overlay {
@@ -47,7 +58,6 @@ $scrollbar:      #c8b8a2;
   background: rgba(255,255,255,1);
   cursor: pointer;
   transition: background 0.15s;
-  &:hover { background: rgba(255,248,235,1); }
 }
 
 .stat-item {
@@ -264,4 +274,66 @@ $scrollbar:      #c8b8a2;
 @keyframes blink {
   0%, 100% { opacity: 1; }
   50%       { opacity: 0; }
+}
+
+// ── CONTEXT MENU ──────────────────────────────────
+.ctx-menu {
+  position: fixed;
+  z-index: 1000;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.18), 0 1px 4px rgba(0,0,0,0.1);
+  padding: 6px 0;
+  min-width: 180px;
+  border: 1px solid rgba(200,184,162,0.4);
+  animation: ctxIn 0.12s ease-out;
+}
+
+@keyframes ctxIn {
+  from { opacity: 0; transform: scale(0.95) translateY(-4px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.ctx-item-name {
+  padding: 6px 14px 4px;
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: #2c1a0e;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+
+.ctx-divider {
+  height: 1px;
+  background: rgba(200,184,162,0.4);
+  margin: 4px 0;
+}
+
+.ctx-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 14px;
+  border: none;
+  background: none;
+  font-family: sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.1s;
+
+  &.ctx-delete {
+    color: #c44;
+    &:hover { background: rgba(200,50,50,0.07); }
+  }
+}
+
+// Подсветка строки при ховере
+.table-row {
+  cursor: context-menu;
 }

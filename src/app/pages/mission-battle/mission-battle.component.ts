@@ -35,6 +35,7 @@ export class MissionBattleComponent implements OnInit, OnDestroy, AfterViewCheck
   isWin = false;
   isDead = false;
   gainedXp = 0;
+  combatResult: any = null;
 
   // Battle log streamed line by line
   allLogs: string[] = [];
@@ -179,46 +180,60 @@ export class MissionBattleComponent implements OnInit, OnDestroy, AfterViewCheck
   // ── BATTLE ────────────────────────────────────────
 
   startBattle(): void {
-    // Защита от двойного вызова
-    if (this.battleStarted) return;
 
-    const token = localStorage.getItem('token');
-    const headers = token ? new HttpHeaders({ Authorization: `Bearer ${token}` }) : undefined;
+  if (this.battleStarted) return;
+  this.battleStarted = true;
 
-    // Бэкенд возвращает PascalCase — берём оба варианта
-    const characterId = this.character.id || this.character.Id;
-    if (!characterId) {
-      console.error('Character ID not found in:', this.character);
-      return;
-    }
+  this.visibleLogs = [];
+  this.allLogs = [];
+  this.logIndex = 0;
 
-    const dto = {
-      characterId,
-      missionId: this.missionId
-    };
-
-    this.battleStarted = true;
-    this.bossStatus = 'Engaged';
-
-    this.http.post<any>(`${environment.apiUrl}/Combat/start`, dto, { headers }).subscribe({
-      next: (result) => {
-        this.allLogs = result.logs || result.Logs || [];
-        this.isWin = result.isWin ?? result.IsWin ?? false;
-        this.gainedXp = result.gainedXp || result.GainedXp || 0;
-        this.streamLogs(this.isWin);
-      },
-      error: (err) => {
-        console.error('Combat/start error:', err);
-        // Fallback mock battle log
-        const mockLogs = this.generateMockBattleLogs();
-        this.allLogs = mockLogs;
-        const mockWin = Math.random() > 0.4;
-        this.isWin = mockWin;
-        this.gainedXp = mockWin ? (this.mission?.rewardExperience || 200) : 0;
-        this.streamLogs(mockWin);
-      }
-    });
+  if (this.logInterval) {
+    clearInterval(this.logInterval);
+    this.logInterval = null;
   }
+
+  const token = localStorage.getItem('token');
+  const headers = token ? new HttpHeaders({ Authorization: `Bearer ${token}` }) : undefined;
+
+  const characterId = this.character.id || this.character.Id;
+  if (!characterId) {
+    console.error('Character ID not found in:', this.character);
+    this.battleStarted = false; // важно откатить
+    return;
+  }
+
+  const dto = {
+    characterId,
+    missionId: this.missionId
+  };
+
+  this.bossStatus = 'Engaged';
+
+  this.http.post<any>(`${environment.apiUrl}/Combat/start`, dto, { headers }).subscribe({
+    next: (result) => {
+      this.combatResult = result;
+      this.allLogs = result.logs || result.Logs || [];
+      this.isWin = result.isWin ?? result.IsWin ?? false;
+      this.gainedXp = result.gainedXp || result.GainedXp || 0;
+
+      this.battleFinished = false;
+      this.streamLogs(this.isWin);
+    },
+    error: (err) => {
+      console.error('Combat/start error:', err);
+
+      const mockLogs = this.generateMockBattleLogs();
+      this.allLogs = mockLogs;
+
+      const mockWin = Math.random() > 0.4;
+      this.isWin = mockWin;
+      this.gainedXp = mockWin ? (this.mission?.rewardExperience || 200) : 0;
+
+      this.streamLogs(mockWin);
+    }
+  });
+}
 
   private generateMockBattleLogs(): string[] {
     const bossName = this.boss?.name || 'Boss';
@@ -303,15 +318,25 @@ export class MissionBattleComponent implements OnInit, OnDestroy, AfterViewCheck
   // ── WIN / DEATH ───────────────────────────────────
 
   handleVictory(): void {
-    const victoryMsg = `⚔️ ${this.character.name} defeated ${this.boss?.name || 'the enemy'}! Gained ${this.gainedXp} XP!`;
+    const rewardItems: any[] = this.combatResult?.rewardItems || this.combatResult?.RewardItems || [];
+
+    let victoryMsg = `⚔️ ${this.character.name || this.character.Name} defeated ${this.boss?.name || this.boss?.Name || 'the enemy'}! Gained ${this.gainedXp} XP!`;
+
+    if (rewardItems.length > 0) {
+      const itemNames = rewardItems.map((r: any) => {
+        const name = r.itemName || r.ItemName || 'Item';
+        const qty = r.quantity || r.Quantity || 1;
+        return qty > 1 ? `${name} x${qty}` : name;
+      }).join(', ');
+      victoryMsg += ` 🎁 Items: ${itemNames}`;
+    }
+
     this.addSystemMessage(victoryMsg);
 
-    // Update character in localStorage with new XP/level
-    const updatedChar = { ...this.character, experience: (this.character.experience || 0) + this.gainedXp };
+    const updatedChar = { ...this.character, experience: (this.character.experience || this.character.Experience || 0) + this.gainedXp };
     localStorage.setItem('selectedCharacter', JSON.stringify(updatedChar));
     this.character = updatedChar;
 
-    // Refresh character from API
     this.refreshCharacter();
   }
 

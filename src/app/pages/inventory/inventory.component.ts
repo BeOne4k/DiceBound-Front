@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -24,6 +24,22 @@ export class InventoryComponent implements OnInit {
   charHp      = '';
   charMaxHp   = '';
   charRace    = '';
+
+  // Context menu
+  ctxVisible = false;
+  ctxX = 0;
+  ctxY = 0;
+  ctxItem: any = null;
+
+  @HostListener('document:click')
+  onDocClick() { this.ctxVisible = false; }
+
+  @HostListener('document:contextmenu', ['$event'])
+  onDocCtx(e: MouseEvent) {
+    // Закрываем если клик не по строке таблицы
+    const target = e.target as HTMLElement;
+    if (!target.closest('.table-row')) this.ctxVisible = false;
+  }
 
   constructor(private router: Router, private http: HttpClient) {}
 
@@ -73,9 +89,39 @@ export class InventoryComponent implements OnInit {
     this.router.navigate(['/home']);
   }
 
+  onRowRightClick(e: MouseEvent, item: any): void {
+    e.preventDefault();
+    e.stopPropagation();
+    this.ctxX = e.clientX;
+    this.ctxY = e.clientY;
+    this.ctxItem = item;
+    this.ctxVisible = true;
+  }
+
+  deleteItem(): void {
+    if (!this.ctxItem) return;
+    this.ctxVisible = false;
+
+    const charId = this.character?.id || this.character?.Id;
+    const invItemId = this.ctxItem.id || this.ctxItem.Id;
+    const token = localStorage.getItem('token');
+    const headers = token ? new HttpHeaders({ Authorization: `Bearer ${token}` }) : undefined;
+
+    this.http.delete(`${environment.apiUrl}/Characters/${charId}/inventory/${invItemId}`, { headers })
+      .subscribe({
+        next: () => {
+          this.items = this.items.filter(i => (i.id || i.Id) !== invItemId);
+        },
+        error: () => {
+          this.error = 'Failed to delete item';
+        }
+      });
+  }
+
   getRarityClass(rarity: string): string {
     return 'rarity-' + (rarity || 'Common').toLowerCase();
   }
+
 
   getModifierLabel(modifier: number): string {
     if (!modifier) return '';

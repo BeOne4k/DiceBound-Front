@@ -401,3 +401,35 @@ $scrollbar-thumb: #c8b8a2;
     color: #828AD0; // HP — красный
   }
 }
+// ── MISSION REWARDS ───────────────────────────────
+.item-rewards {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  margin-top: 5px;
+}
+
+.reward-label {
+  font-size: 10px;
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #7a6248;
+  text-transform: uppercase;
+  margin-right: 2px;
+}
+
+.reward-badge {
+  font-size: 11px;
+  font-family: sans-serif;
+  font-weight: 600;
+  padding: 1px 7px;
+  border-radius: 4px;
+  white-space: nowrap;
+
+  &.rarity-common    { background: rgba(180,180,180,0.2); color: #555; border: 1px solid #ccc; }
+  &.rarity-rare      { background: rgba(49,100,220,0.12); color: #2255bb; border: 1px solid #aac; }
+  &.rarity-epic      { background: rgba(130,70,200,0.14); color: #7733bb; border: 1px solid #b9a; }
+  &.rarity-legendary { background: rgba(200,140,0,0.16);  color: #8a5a00; border: 1px solid #FFBE31; }
+}

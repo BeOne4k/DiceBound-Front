@@ -331,14 +331,18 @@ $scrollbar-thumb:    #c8b8a2;
 
 .char-stats {
   .stat-item:nth-child(1) .stat-label {
-    color: #2ecc71; // имя — зелёный
+    color: #74975A; // имя — зелёный
   }
 
   .stat-item:nth-child(3) .stat-label {
-    color: #f1c40f; // уровень — жёлтый
+    color: #D8A326; // уровень — жёлтый
   }
 
   .stat-item:nth-child(5) .stat-label {
-    color: #e74c3c; // HP — красный
+    color: #F76C6C; // HP — красный
+  }
+
+    .stat-item:nth-child(7) .stat-label {
+    color: #828AD0; // HP — красный
   }
 }

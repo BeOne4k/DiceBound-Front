@@ -49,6 +49,12 @@
             <span class="badge diff-badge">{{ getDifficultyLabel(mission.difficulty) }}</span>
             <span class="badge xp-badge">{{ mission.rewardExperience }} XP</span>
           </div>
+          <div class="item-rewards" *ngIf="mission.rewardItems && mission.rewardItems.length > 0">
+            <span class="reward-label">Rewards:</span>
+            <span *ngFor="let r of mission.rewardItems" class="reward-badge" [class]="'rarity-' + (r.itemRarity || 'Common').toLowerCase()">
+              {{ r.itemName }}<span *ngIf="r.quantity > 1"> x{{ r.quantity }}</span>
+            </span>
+          </div>
         </div>
 
         <div *ngIf="!loadingMissions && missions.length === 0" class="empty-hint">
