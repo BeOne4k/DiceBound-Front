@@ -9,16 +9,16 @@
 
       <div *ngFor="let char of characters; let i = index"
            class="character-item"
-           [class.active]="selectedCharacter?.id === char.id"
+           [class.active]="(selectedCharacter?.id || selectedCharacter?.Id) === (char.id || char.Id)"
            (click)="selectCharacter(char)">
         <div class="char-info">
-          <span class="char-name">{{ char.name }}</span>
-          <span class="char-race">Race: {{ char.raceName }}</span>
+          <span class="char-name">{{ char.name || char.Name }}</span>
+          <span class="char-race">Race: {{ char.raceName || char.RaceName }}</span>
         </div>
         <div class="char-stats">
-          <span>Level {{ char.level }}</span>
+          <span>Level {{ char.level || char.Level }}</span>
           <span class="divider">|</span>
-          <span>HP: {{ char.hp }}</span>
+          <span>HP: {{ char.hp || char.HP }}</span>
         </div>
       </div>
 
@@ -33,3 +33,21 @@
     </div>
   </div>
 </section>
+
+<!-- Subscription limit modal -->
+<div class="modal-backdrop" *ngIf="showLimitModal" (click)="closeLimitModal()">
+  <div class="modal-card" (click)="$event.stopPropagation()">
+    <div class="modal-icon">🔒</div>
+    <h2 class="modal-title">Character Limit Reached</h2>
+    <p class="modal-desc">
+      Free accounts can have up to <strong>3 characters</strong>.<br>
+      Subscribe for <strong>$4.99/month</strong> to create unlimited characters.
+    </p>
+    <button class="modal-subscribe-btn" (click)="goToSubscription()">
+      Subscribe — $4.99/mo
+    </button>
+    <button class="modal-cancel-btn" (click)="closeLimitModal()">
+      Maybe later
+    </button>
+  </div>
+</div>

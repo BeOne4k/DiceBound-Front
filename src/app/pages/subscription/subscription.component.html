@@ -1,0 +1,91 @@
+<div class="sub-wrapper">
+  <div class="bg-overlay"></div>
+
+  <!-- Success state -->
+  <div class="success-screen" *ngIf="success">
+    <div class="success-icon">✓</div>
+    <div class="success-title">Payment Successful!</div>
+    <div class="success-sub">Redirecting to character creation...</div>
+  </div>
+
+  <!-- Payment form -->
+  <div class="sub-card" *ngIf="!success">
+
+    <img src="/images/Logo.svg" class="logo" alt="DiceBound" />
+
+    <h1 class="form-title">Subscription Payment</h1>
+    <p class="form-desc">Unlock unlimited character slots — <strong>$4.99 / month</strong></p>
+
+    <!-- Card Number -->
+    <div class="field-group">
+      <label class="field-label">Card number</label>
+      <input
+        class="field-input"
+        [class.error]="errors['card']"
+        type="text"
+        placeholder="0000 0000 0000 0000"
+        [value]="cardNumber"
+        (input)="formatCardNumber($event)"
+        maxlength="19"
+        inputmode="numeric"
+      />
+      <span class="field-error" *ngIf="errors['card']">{{ errors['card'] }}</span>
+    </div>
+
+    <!-- Expiry + CVV row -->
+    <div class="field-row">
+      <div class="field-group half">
+        <label class="field-label">Expiration date</label>
+        <input
+          class="field-input"
+          [class.error]="errors['expiry']"
+          type="text"
+          placeholder="MM/YY"
+          [value]="expiry"
+          (input)="formatExpiry($event)"
+          maxlength="5"
+          inputmode="numeric"
+        />
+        <span class="field-error" *ngIf="errors['expiry']">{{ errors['expiry'] }}</span>
+      </div>
+
+      <div class="field-group half">
+        <label class="field-label">CVC/CVV</label>
+        <input
+          class="field-input"
+          [class.error]="errors['cvv']"
+          type="text"
+          placeholder="•••"
+          [value]="cvv"
+          (input)="formatCvv($event)"
+          maxlength="3"
+          inputmode="numeric"
+        />
+        <span class="field-error" *ngIf="errors['cvv']">{{ errors['cvv'] }}</span>
+      </div>
+    </div>
+
+    <!-- Card Owner Name -->
+    <div class="field-group">
+      <label class="field-label">Card owner name</label>
+      <input
+        class="field-input"
+        [class.error]="errors['name']"
+        type="text"
+        placeholder="FULL NAME"
+        [(ngModel)]="cardName"
+        maxlength="60"
+        style="text-transform: uppercase;"
+      />
+      <span class="field-error" *ngIf="errors['name']">{{ errors['name'] }}</span>
+    </div>
+
+    <button class="subscribe-btn" (click)="subscribe()" [disabled]="loading">
+      <span *ngIf="!loading">Subscribe</span>
+      <span *ngIf="loading" class="loading-dots">Processing<span>.</span><span>.</span><span>.</span></span>
+    </button>
+
+    <button class="back-link" (click)="goBack()">← Back to characters</button>
+
+  </div>
+</div>

@@ -1,0 +1,267 @@
+// ────────────────────────────────────────────────
+//  DiceBound – Inventory Page
+// ────────────────────────────────────────────────
+
+$text-grad-from: #A75347;
+$text-grad-to:   #FFBE31;
+$border-color:   rgba(180, 160, 130, 0.35);
+$scrollbar:      #c8b8a2;
+
+// ── WRAPPER ───────────────────────────────────────
+.inv-wrapper {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: url('/images/mainbg.webp') center/cover no-repeat;
+  font-family: 'Cinzel', 'Palatino Linotype', serif;
+}
+
+.bg-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.3);
+  filter: brightness(0.8) saturate(0.85);
+  z-index: 0;
+}
+
+// ── TOP BAR ───────────────────────────────────────
+.top-bar {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 28px 10px;
+  width: 60%;
+}
+
+.char-stats {
+  display: flex;
+  align-items: center;
+  padding: 6px 14px;
+  border-radius: 25px;
+  background: rgba(255,255,255,1);
+  cursor: pointer;
+  transition: background 0.15s;
+  &:hover { background: rgba(255,248,235,1); }
+}
+
+.stat-item {
+  padding: 0 10px;
+  .stat-label {
+    font-size: 20px;
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+}
+.stat-name  { color: #74975A; }
+.stat-level { color: #D8A326; }
+.stat-hp    { color: #F76C6C; }
+.stat-race  { color: #828AD0; }
+
+.stat-divider {
+  width: 1px;
+  height: 20px;
+  background: rgba(255,190,49,0.3);
+  flex-shrink: 0;
+}
+
+.logo-wrap {
+  .logo-long { height: 70px; object-fit: contain; }
+}
+
+// ── MAIN PANEL (same width/structure as home/tavern) ──
+.inv-panel {
+  position: relative;
+  z-index: 10;
+  width: 60%;
+  background: rgba(255,255,255,0.97);
+  border-radius: 16px;
+  padding: 24px 28px 20px;
+  height: 560px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+// ── PANEL HEADER ──────────────────────────────────
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  flex-shrink: 0;
+}
+
+.panel-title {
+  font-family: 'Cinzel', serif;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  background: linear-gradient(to top, $text-grad-from, $text-grad-to);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0;
+}
+
+.home-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border: 1.5px solid $border-color;
+  border-radius: 20px;
+  background: white;
+  cursor: pointer;
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #2c1a0e;
+  transition: background 0.15s, transform 0.1s;
+
+  &:hover { background: rgba(255,245,220,0.9); transform: translateX(-2px); }
+
+  .home-icon { font-size: 18px; color: $text-grad-from; font-weight: 300; }
+  .home-house { font-family: sans-serif; font-size: 14px; }
+}
+
+// ── TABLE ─────────────────────────────────────────
+.inv-table {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+
+  &::-webkit-scrollbar { width: 6px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb { background: $scrollbar; border-radius: 3px; }
+}
+
+// Header
+.table-head {
+  display: grid;
+  grid-template-columns: 2fr 0.7fr 0.8fr 0.8fr 0.4fr 0.6fr;
+  padding: 0 12px 10px;
+  border-bottom: 2px solid $border-color;
+  flex-shrink: 0;
+
+  > div {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #2c1a0e;
+  }
+}
+
+// Rows
+.table-row {
+  display: grid;
+  grid-template-columns: 2fr 0.7fr 0.8fr 0.8fr 0.4fr 0.6fr;
+  padding: 12px 12px;
+  border-bottom: 1px solid $border-color;
+  align-items: center;
+  transition: background 0.1s;
+  animation: rowIn 0.2s ease-out;
+
+  &:hover { background: rgba(255,245,220,0.5); }
+  &.row-odd { background: rgba(0,0,0,0.015); }
+  &.row-odd:hover { background: rgba(255,245,220,0.5); }
+}
+
+@keyframes rowIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+// Columns
+.col-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  .item-icon { font-size: 18px; line-height: 1; }
+
+  .item-name {
+    font-family: 'Cinzel', serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: #2c1a0e;
+  }
+}
+
+.col-type, .col-rarity, .col-dice, .col-qty, .col-equipped {
+  font-family: sans-serif;
+  font-size: 13px;
+  color: #4a3525;
+}
+
+.type-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 5px;
+  background: rgba(44,26,14,0.07);
+  font-size: 11px;
+  font-weight: 600;
+  font-family: sans-serif;
+  color: #4a3525;
+  border: 1px solid $border-color;
+}
+
+// Rarity colours
+.rarity-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 5px;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: sans-serif;
+  letter-spacing: 0.5px;
+
+  &.rarity-common    { background: rgba(180,180,180,0.18); color: #666; border: 1px solid #ccc; }
+  &.rarity-rare      { background: rgba(49,100,220,0.12);  color: #2255bb; border: 1px solid #aac; }
+  &.rarity-epic      { background: rgba(130,70,200,0.14);  color: #7733bb; border: 1px solid #b9a; }
+  &.rarity-legendary { background: rgba(200,140,0,0.16);   color: #8a5a00; border: 1px solid $text-grad-to; }
+}
+
+.equipped-dot {
+  font-size: 14px;
+  color: #aaa;
+  &.equipped { color: #74975A; font-weight: 700; }
+}
+
+// Empty / loading state
+.table-empty {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: sans-serif;
+  font-size: 14px;
+  color: #aaa;
+  font-style: italic;
+  padding: 40px 0;
+
+  &.error { color: #c44; }
+}
+
+.loading-dots span {
+  animation: blink 1.2s step-start infinite;
+  &:nth-child(2) { animation-delay: 0.2s; }
+  &:nth-child(3) { animation-delay: 0.4s; }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}

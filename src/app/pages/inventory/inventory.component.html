@@ -1,0 +1,105 @@
+<div class="inv-wrapper">
+  <div class="bg-overlay"></div>
+
+  <!-- Top Bar -->
+  <header class="top-bar">
+    <div class="char-stats" (click)="goBackToCharacters()" title="Back to character selection">
+      <div class="stat-item">
+        <span class="stat-label stat-name">{{ charName }}</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-label stat-level">Level: {{ charLevel }}</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-label stat-hp">HP: {{ charHp }}/{{ charMaxHp }}</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-label stat-race">Race: {{ charRace }}</span>
+      </div>
+    </div>
+    <div class="logo-wrap">
+      <img src="/images/Logo long.svg" class="logo-long" alt="DiceBound" />
+    </div>
+  </header>
+
+  <!-- Main panel -->
+  <main class="inv-panel">
+
+    <!-- Panel header -->
+    <div class="panel-header">
+      <h1 class="panel-title">Inventory</h1>
+      <button class="home-btn" (click)="goHome()">
+        <span class="home-icon">‹</span>
+        <span>Home Page</span>
+        <span class="home-house">⌂</span>
+      </button>
+    </div>
+
+    <!-- Table -->
+    <div class="inv-table">
+      <!-- Header row -->
+      <div class="table-head">
+        <div class="col-item">Item</div>
+        <div class="col-type">Type</div>
+        <div class="col-rarity">Rarity</div>
+        <div class="col-dice">Dice</div>
+        <div class="col-qty">Qty</div>
+        <div class="col-equipped">Equipped</div>
+      </div>
+
+      <!-- Loading -->
+      <div class="table-empty" *ngIf="loading">
+        <span class="loading-dots">Loading<span>.</span><span>.</span><span>.</span></span>
+      </div>
+
+      <!-- Error -->
+      <div class="table-empty error" *ngIf="error && !loading">
+        {{ error }}
+      </div>
+
+      <!-- Empty inventory -->
+      <div class="table-empty" *ngIf="!loading && !error && items.length === 0">
+        Your inventory is empty
+      </div>
+
+      <!-- Item rows -->
+      <div class="table-row"
+           *ngFor="let item of items; let odd = odd"
+           [class.row-odd]="odd">
+
+        <div class="col-item">
+          <span class="item-name">{{ item.name || item.Name }}</span>
+        </div>
+
+        <div class="col-type">
+          <span class="type-badge">{{ item.type || item.Type }}</span>
+        </div>
+
+        <div class="col-rarity">
+          <span class="rarity-badge" [ngClass]="getRarityClass(item.rarity || item.Rarity)">
+            {{ item.rarity || item.Rarity }}
+          </span>
+        </div>
+
+        <div class="col-dice">
+          {{ getDiceLabel(item) }}
+        </div>
+
+        <div class="col-qty">
+          {{ item.quantity || item.Quantity || 1 }}
+        </div>
+
+        <div class="col-equipped">
+          <span class="equipped-dot" [class.equipped]="item.isEquipped || item.IsEquipped">
+            {{ (item.isEquipped || item.IsEquipped) ? '✓' : '—' }}
+          </span>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+</div>

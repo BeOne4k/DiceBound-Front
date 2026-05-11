@@ -1,0 +1,241 @@
+// ────────────────────────────────────────────────
+//  DiceBound – Subscription Payment Page
+// ────────────────────────────────────────────────
+
+$green-dark:  #516B3E;
+$green-mid:   #74975A;
+$green-light: #a0c078;
+
+// ── WRAPPER ───────────────────────────────────────
+.sub-wrapper {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: url('/images/mainbg.webp') center/cover no-repeat;
+}
+
+.bg-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 20, 0, 0.35);
+  z-index: 0;
+}
+
+// ── SUCCESS SCREEN ────────────────────────────────
+.success-screen {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  animation: fadeIn 0.4s ease-out;
+
+  .success-icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: $green-mid;
+    color: white;
+    font-size: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 32px rgba(116, 151, 90, 0.5);
+  }
+
+  .success-title {
+    font-family: 'Cinzel', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: white;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  }
+
+  .success-sub {
+    font-size: 14px;
+    color: rgba(255,255,255,0.75);
+    font-family: sans-serif;
+  }
+}
+
+// ── CARD ─────────────────────────────────────────
+.sub-card {
+  position: relative;
+  z-index: 10;
+  width: 360px;
+  background: rgba(255, 255, 255, 0.97);
+  border-radius: 20px;
+  padding: 32px 28px 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.25);
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+// ── LOGO ─────────────────────────────────────────
+.logo {
+  height: 60px;
+  margin-bottom: 18px;
+  object-fit: contain;
+}
+
+// ── TITLE ─────────────────────────────────────────
+.form-title {
+  font-family: 'Cinzel', serif;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  background: linear-gradient(to top, $green-dark, $green-mid);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0 0 6px 0;
+  text-align: center;
+}
+
+.form-desc {
+  font-family: sans-serif;
+  font-size: 13px;
+  color: #666;
+  margin: 0 0 22px 0;
+  text-align: center;
+
+  strong { color: $green-dark; }
+}
+
+// ── FIELDS ────────────────────────────────────────
+.field-group {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 14px;
+
+  &.half {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+.field-row {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+}
+
+.field-label {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: #555;
+}
+
+.field-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid #d8d8d8;
+  border-radius: 9px;
+  font-family: sans-serif;
+  font-size: 14px;
+  color: #1a1a1a;
+  background: white;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  letter-spacing: 0.5px;
+
+  &::placeholder {
+    color: #ccc;
+    letter-spacing: 1px;
+  }
+
+  &:focus {
+    border-color: $green-mid;
+    box-shadow: 0 0 0 3px rgba(116, 151, 90, 0.15);
+  }
+
+  &.error {
+    border-color: #e05555;
+    box-shadow: 0 0 0 3px rgba(224, 85, 85, 0.1);
+  }
+}
+
+.field-error {
+  font-family: sans-serif;
+  font-size: 11px;
+  color: #e05555;
+  margin-top: 1px;
+}
+
+// ── BUTTON ────────────────────────────────────────
+.subscribe-btn {
+  width: 100%;
+  padding: 13px;
+  margin-top: 8px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(to bottom, $green-mid, $green-dark);
+  color: white;
+  font-family: 'Cinzel', serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+  box-shadow: 0 4px 16px rgba(81, 107, 62, 0.35);
+
+  &:hover:not(:disabled) {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+  }
+}
+
+// ── LOADING DOTS ──────────────────────────────────
+.loading-dots span {
+  animation: blink 1.2s step-start infinite;
+  &:nth-child(2) { animation-delay: 0.2s; }
+  &:nth-child(3) { animation-delay: 0.4s; }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+// ── BACK LINK ────────────────────────────────────
+.back-link {
+  margin-top: 14px;
+  background: none;
+  border: none;
+  font-family: sans-serif;
+  font-size: 13px;
+  color: #999;
+  cursor: pointer;
+  transition: color 0.15s;
+
+  &:hover { color: $green-dark; }
+}

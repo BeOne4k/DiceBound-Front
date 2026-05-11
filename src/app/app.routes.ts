@@ -45,6 +45,18 @@ export const routes: Routes = [
         .then(m => m.HomeComponent)
   },
   {
+    path: 'inventory',
+    loadComponent: () =>
+      import('./pages/inventory/inventory.component')
+        .then(m => m.InventoryComponent)
+  },
+  {
+    path: 'subscription',
+    loadComponent: () =>
+      import('./pages/subscription/subscription.component')
+        .then(m => m.SubscriptionComponent)
+  },
+  {
     path: 'tavern',
     loadComponent: () =>
       import('./pages/tavern/tavern.component')

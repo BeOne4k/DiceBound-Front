@@ -68,6 +68,10 @@ export class HomeComponent implements OnInit {
     this.router.navigate(['/tavern']);
   }
 
+  goToInventory() {
+    this.router.navigate(['/inventory']);
+  }
+
   goToMission(mission: any) {
     this.router.navigate(['/mission', mission.id]);
   }
