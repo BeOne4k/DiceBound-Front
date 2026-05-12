@@ -45,6 +45,12 @@ export const routes: Routes = [
         .then(m => m.HomeComponent)
   },
   {
+    path: 'admin',
+    loadComponent: () =>
+      import('./pages/admin/admin.component')
+        .then(m => m.AdminComponent)
+  },
+  {
     path: 'inventory',
     loadComponent: () =>
       import('./pages/inventory/inventory.component')

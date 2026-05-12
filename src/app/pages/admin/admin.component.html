@@ -1,0 +1,286 @@
+<div class="admin-wrapper">
+
+  <!-- ── LOGIN SCREEN ─────────────────────────────── -->
+  <div class="login-screen" *ngIf="!authenticated">
+    <div class="login-card">
+      <h1 class="login-title">Admin Panel</h1>
+      <p class="login-sub">DiceBound · Restricted access</p>
+      <div class="field-group">
+        <label class="field-label">Password</label>
+        <input class="field-input" [class.error]="passwordError"
+               type="password" placeholder="••••••••"
+               [(ngModel)]="passwordInput"
+               (keydown.enter)="login()" />
+        <span class="field-error" *ngIf="passwordError">Incorrect password</span>
+      </div>
+      <button class="login-btn" (click)="login()">Enter</button>
+    </div>
+  </div>
+
+  <!-- ── ADMIN CONTENT ────────────────────────────── -->
+  <div class="admin-layout" *ngIf="authenticated">
+
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+      <div class="sidebar-logo">
+        <span class="logo-text">Admin</span>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button class="nav-btn" [class.active]="activeTab === 'items'"    (click)="activeTab = 'items'"> Items
+          <span class="nav-count">{{ items.length }}</span>
+        </button>
+        <button class="nav-btn" [class.active]="activeTab === 'bosses'"   (click)="activeTab = 'bosses'">Bosses
+          <span class="nav-count">{{ bosses.length }}</span>
+        </button>
+        <button class="nav-btn" [class.active]="activeTab === 'missions'" (click)="activeTab = 'missions'">Missions
+          <span class="nav-count">{{ missions.length }}</span>
+        </button>
+      </nav>
+
+      <button class="logout-btn" (click)="logout()">← Logout</button>
+    </aside>
+
+    <!-- Main -->
+    <main class="admin-main">
+
+      <!-- ══ ITEMS TAB ════════════════════════════════ -->
+      <section *ngIf="activeTab === 'items'">
+        <div class="tab-header">
+          <h2 class="tab-title">Items</h2>
+          <button class="add-btn" (click)="showItemForm = !showItemForm">
+            {{ showItemForm ? '✕ Cancel' : '+ Add Item' }}
+          </button>
+        </div>
+
+        <!-- Item form -->
+        <div class="form-card" *ngIf="showItemForm">
+          <div class="form-grid">
+            <div class="field-group">
+              <label class="field-label">Name *</label>
+              <input class="field-input" type="text" [(ngModel)]="itemForm.name" placeholder="Iron Sword" />
+            </div>
+            <div class="field-group">
+              <label class="field-label">Type</label>
+              <select class="field-input" [(ngModel)]="itemForm.type">
+                <option *ngFor="let t of itemTypes" [value]="t">{{ t }}</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label class="field-label">Rarity</label>
+              <select class="field-input" [(ngModel)]="itemForm.rarity">
+                <option *ngFor="let r of itemRarities" [value]="r">{{ r }}</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label class="field-label">Dice Count</label>
+              <input class="field-input" type="number" [(ngModel)]="itemForm.diceCount" min="1" max="10" />
+            </div>
+            <div class="field-group">
+              <label class="field-label">Dice Sides</label>
+              <input class="field-input" type="number" [(ngModel)]="itemForm.diceSides" min="2" max="20" />
+            </div>
+            <div class="field-group">
+              <label class="field-label">Modifier (buff)</label>
+              <input class="field-input" type="number" [(ngModel)]="itemForm.modifier" />
+            </div>
+          </div>
+          <div class="form-hint">
+            <span *ngIf="itemForm.type === 'Weapon'">Weapon: +{{ itemForm.modifier }} AttackBonus</span>
+            <span *ngIf="itemForm.type === 'Armor'">Armor: +{{ itemForm.modifier }} ArmorClass</span>
+            <span *ngIf="itemForm.type === 'Accessory'">Accessory: +{{ itemForm.modifier }} HP</span>
+            &nbsp;· Dice: {{ itemForm.diceCount }}d{{ itemForm.diceSides }}
+          </div>
+          <button class="submit-btn" (click)="createItem()">Create Item</button>
+        </div>
+
+        <!-- Items list -->
+        <div class="list-loading" *ngIf="loadingItems">Loading...</div>
+        <div class="data-table" *ngIf="!loadingItems">
+          <div class="table-head row-grid-items">
+            <span>Name</span><span>Type</span><span>Rarity</span><span>Dice</span><span>Mod</span><span></span>
+          </div>
+          <div class="table-row row-grid-items" *ngFor="let item of items">
+            <span class="cell-name">{{ getName(item) }}</span>
+            <span><span class="type-pill">{{ item.type || item.Type }}</span></span>
+            <span><span class="rarity-pill" [class]="'rarity-' + (item.rarity || item.Rarity || 'Common').toLowerCase()">{{ item.rarity || item.Rarity }}</span></span>
+            <span class="cell-mono">{{ item.diceCount || item.DiceCount }}d{{ item.diceSides || item.DiceSides }}</span>
+            <span class="cell-mono">{{ (item.modifier || item.Modifier) > 0 ? '+' : '' }}{{ item.modifier || item.Modifier }}</span>
+            <span class="cell-actions">
+              <button class="del-btn" (click)="askDelete('Items', getId(item), getName(item))">🗑</button>
+            </span>
+          </div>
+          <div class="table-empty" *ngIf="items.length === 0">No items yet</div>
+        </div>
+      </section>
+
+      <!-- ══ BOSSES TAB ═══════════════════════════════ -->
+      <section *ngIf="activeTab === 'bosses'">
+        <div class="tab-header">
+          <h2 class="tab-title">Bosses</h2>
+          <button class="add-btn" (click)="showBossForm = !showBossForm">
+            {{ showBossForm ? '✕ Cancel' : '+ Add Boss' }}
+          </button>
+        </div>
+
+        <!-- Boss form -->
+        <div class="form-card" *ngIf="showBossForm">
+          <div class="form-grid">
+            <div class="field-group">
+              <label class="field-label">Name *</label>
+              <input class="field-input" type="text" [(ngModel)]="bossForm.name" placeholder="Ragnarok" />
+            </div>
+            <div class="field-group">
+              <label class="field-label">Required Level</label>
+              <input class="field-input" type="number" [(ngModel)]="bossForm.requiredLevel" min="1" />
+            </div>
+            <div class="field-group">
+              <label class="field-label">HP</label>
+              <input class="field-input" type="number" [(ngModel)]="bossForm.hp" min="1" />
+            </div>
+            <div class="field-group">
+              <label class="field-label">Armor Class</label>
+              <input class="field-input" type="number" [(ngModel)]="bossForm.armorClass" min="1" />
+            </div>
+            <div class="field-group">
+              <label class="field-label">XP Value</label>
+              <input class="field-input" type="number" [(ngModel)]="bossForm.xpValue" min="0" />
+            </div>
+          </div>
+          <button class="submit-btn" (click)="createBoss()">Create Boss</button>
+        </div>
+
+        <!-- Bosses list -->
+        <div class="list-loading" *ngIf="loadingBosses">Loading...</div>
+        <div class="data-table" *ngIf="!loadingBosses">
+          <div class="table-head row-grid-bosses">
+            <span>Name</span><span>Min Lvl</span><span>HP</span><span>AC</span><span>XP</span><span></span>
+          </div>
+          <div class="table-row row-grid-bosses" *ngFor="let boss of bosses">
+            <span class="cell-name">{{ getName(boss) }}</span>
+            <span class="cell-mono">{{ boss.requiredLevel || boss.RequiredLevel }}</span>
+            <span class="cell-mono">{{ boss.hp || boss.HP }}</span>
+            <span class="cell-mono">{{ boss.armorClass || boss.ArmorClass }}</span>
+            <span class="cell-mono">{{ boss.xpValue || boss.XpValue }}</span>
+            <span class="cell-actions">
+              <button class="del-btn" (click)="askDelete('Bosses', getId(boss), getName(boss))">🗑</button>
+            </span>
+          </div>
+          <div class="table-empty" *ngIf="bosses.length === 0">No bosses yet</div>
+        </div>
+      </section>
+
+      <!-- ══ MISSIONS TAB ══════════════════════════════ -->
+      <section *ngIf="activeTab === 'missions'">
+        <div class="tab-header">
+          <h2 class="tab-title">Missions</h2>
+          <button class="add-btn" (click)="showMissionForm = !showMissionForm">
+            {{ showMissionForm ? '✕ Cancel' : '+ Add Mission' }}
+          </button>
+        </div>
+
+        <!-- Mission form -->
+        <div class="form-card" *ngIf="showMissionForm">
+          <div class="form-grid">
+            <div class="field-group">
+              <label class="field-label">Name *</label>
+              <input class="field-input" type="text" [(ngModel)]="missionForm.name" placeholder="The Dark Forest" />
+            </div>
+            <div class="field-group">
+              <label class="field-label">Min Level</label>
+              <input class="field-input" type="number" [(ngModel)]="missionForm.minLevel" min="1" />
+            </div>
+            <div class="field-group">
+              <label class="field-label">Difficulty</label>
+              <select class="field-input" [(ngModel)]="missionForm.difficulty">
+                <option *ngFor="let d of difficulties" [value]="d">{{ d }} — {{ diffLabels[d] }}</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label class="field-label">Reward XP</label>
+              <input class="field-input" type="number" [(ngModel)]="missionForm.rewardExperience" min="0" />
+            </div>
+            <div class="field-group">
+              <label class="field-label">Boss (optional)</label>
+              <select class="field-input" [(ngModel)]="missionForm.bossId">
+                <option value="">— No boss —</option>
+                <option *ngFor="let b of bosses" [value]="getId(b)">{{ getName(b) }}</option>
+              </select>
+            </div>
+          </div>
+          <button class="submit-btn" (click)="createMission()">Create Mission</button>
+        </div>
+
+        <!-- Missions list -->
+        <div class="list-loading" *ngIf="loadingMissions">Loading...</div>
+        <div class="data-table" *ngIf="!loadingMissions">
+          <div class="table-head row-grid-missions">
+            <span>Name</span><span>Lvl</span><span>Difficulty</span><span>XP</span><span>Boss</span><span>Rewards</span><span></span>
+          </div>
+
+          <ng-container *ngFor="let m of missions">
+            <div class="table-row row-grid-missions" [class.row-expanded]="expandedMission === getId(m)">
+              <span class="cell-name">{{ getName(m) }}</span>
+              <span class="cell-mono">{{ m.minLevel || m.MinLevel }}</span>
+              <span><span class="diff-pill diff-{{ m.difficulty || m.Difficulty }}">{{ diffLabels[m.difficulty || m.Difficulty] }}</span></span>
+              <span class="cell-mono">{{ m.rewardExperience || m.RewardExperience }}</span>
+              <span class="cell-boss">{{ m.bossName || m.BossName || '—' }}</span>
+              <span>
+                <button class="reward-toggle" (click)="toggleExpand(getId(m))">
+                  {{ (m.rewardItems || m.RewardItems || []).length }}
+                </button>
+              </span>
+              <span class="cell-actions">
+                <button class="del-btn" (click)="askDelete('Missions', getId(m), getName(m))">🗑</button>
+              </span>
+            </div>
+
+            <!-- Reward panel -->
+            <div class="reward-panel" *ngIf="expandedMission === getId(m)">
+              <div class="reward-list">
+                <span class="reward-label">Rewards:</span>
+                <span *ngFor="let r of (m.rewardItems || m.RewardItems || [])"
+                      class="reward-chip"
+                      [class]="'rarity-' + (r.itemRarity || r.ItemRarity || 'Common').toLowerCase()">
+                  {{ r.itemName || r.ItemName }}
+                  <span *ngIf="(r.quantity || r.Quantity) > 1"> ×{{ r.quantity || r.Quantity }}</span>
+                  <button class="chip-del" (click)="removeReward(getId(m), r.id || r.Id)">✕</button>
+                </span>
+                <span *ngIf="(m.rewardItems || m.RewardItems || []).length === 0" class="reward-empty">No rewards</span>
+              </div>
+              <div class="reward-add">
+                <select class="field-input sm" [(ngModel)]="rewardItemId[getId(m)]">
+                  <option value="">— Select item —</option>
+                  <option *ngFor="let it of items" [value]="getId(it)">{{ getName(it) }}</option>
+                </select>
+                <input class="field-input sm qty" type="number" [(ngModel)]="rewardQty[getId(m)]" min="1" max="99" placeholder="Qty" />
+                <button class="add-reward-btn" (click)="submitReward(getId(m))">Add</button>
+              </div>
+            </div>
+          </ng-container>
+
+          <div class="table-empty" *ngIf="missions.length === 0">No missions yet</div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ── DELETE CONFIRM MODAL ──────────────────── -->
+  <div class="modal-backdrop" *ngIf="confirmDelete" (click)="confirmDelete = null">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+      <h3 class="modal-title">Delete "{{ confirmDelete.name }}"?</h3>
+      <p class="modal-desc">This action cannot be undone.</p>
+      <div class="modal-btns">
+        <button class="modal-cancel" (click)="confirmDelete = null">Cancel</button>
+        <button class="modal-confirm" (click)="doDelete()">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── TOAST ──────────────────────────────────── -->
+  <div class="toast" *ngIf="toast" [class.toast-err]="toast.type === 'err'">
+    {{ toast.msg }}
+  </div>
+
+</div>
