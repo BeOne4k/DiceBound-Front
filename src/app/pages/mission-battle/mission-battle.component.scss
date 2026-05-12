@@ -676,3 +676,197 @@ $scrollbar-thumb:    #c8b8a2;
   from { opacity: 0; transform: translateX(8px); }
   to   { opacity: 1; transform: translateX(0); }
 }
+
+// ════════════════════════════════════════════════
+//  MOBILE ≤ 400px
+// ════════════════════════════════════════════════
+@media (max-width: 400px) {
+  .battle-wrapper { justify-content: flex-start; padding-top: 8px; }
+
+  .death-screen .death-text { font-size: 48px; letter-spacing: 6px; }
+  .death-screen .death-sub  { font-size: 13px; }
+
+  .top-bar {
+    width: 100%;
+    padding: 8px 10px 6px;
+  }
+
+  .char-stats {
+    padding: 4px 7px;
+    max-width: calc(100vw - 72px);
+    overflow: hidden;
+  }
+
+  .stat-item {
+    padding: 0 4px;
+    .stat-label { font-size: 10px; }
+  }
+
+  .stat-divider { height: 12px; }
+  .logo-wrap .logo-long { height: 34px; }
+
+  .battle-content {
+    width: 100%;
+    height: calc(100vh - 54px);
+    border-radius: 0;
+    flex-direction: column;
+  }
+
+  // Сайдбар игроков — горизонтальная полоска сверху
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    padding: 8px 10px;
+    border-right: none;
+    border-bottom: 1px solid rgba(200,184,162,0.4);
+    flex-shrink: 0;
+    gap: 8px;
+  }
+
+  .boss-title-block { margin-bottom: 0; flex-shrink: 0; }
+  .boss-title-block .section-label { font-size: 13px; }
+
+  .players-section {
+    flex: 1;
+    overflow: hidden;
+  }
+
+  .players-list {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .player-item { font-size: 11px; }
+
+  .sidebar-footer { display: none; }
+
+  // Центр — чат
+  .chat-panel {
+    flex: 1;
+    border-right: none;
+    min-height: 0;
+  }
+
+  .boss-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 8px 10px;
+  }
+
+  .boss-header-left  { gap: 6px; }
+  .boss-header-right { width: 100%; justify-content: space-between; }
+  .boss-mission-label { font-size: 12px; }
+  .boss-name-label    { font-size: 14px; }
+  .boss-hp-bar        { width: 80px; }
+
+  .chat-messages {
+    margin: 0 8px;
+    padding: 6px 8px;
+  }
+
+  .chat-message {
+    .msg-author { font-size: 11px; }
+    .msg-text   { font-size: 12px; }
+  }
+
+  .chat-input-row { margin: 6px 8px 8px; }
+
+  // Баттл-лог — горизонтальная полоска снизу
+  .battle-log-panel {
+    width: 100%;
+    height: 120px;
+    flex-direction: column;
+    border-top: 1px solid rgba(200,184,162,0.4);
+    flex-shrink: 0;
+  }
+
+  .log-header { padding: 6px 10px; }
+  .log-title  { font-size: 13px; }
+
+  .log-list {
+    padding: 4px 8px;
+    overflow-y: auto;
+  }
+
+  .log-entry .log-text { font-size: 11px; }
+}
+
+// ════════════════════════════════════════════════
+//  TABLET 800px → 450px
+// ════════════════════════════════════════════════
+@media (max-width: 800px) {
+  .top-bar { width: 90%; padding: 10px 16px 8px; }
+  .stat-item .stat-label { font-size: 15px; }
+  .logo-wrap .logo-long  { height: 56px; }
+
+  .battle-content {
+    width: 90%;
+    height: 560px;
+  }
+
+  .sidebar { width: 160px; }
+  .battle-log-panel { width: 160px; }
+
+  .boss-name-label  { font-size: 15px; }
+  .boss-hp-bar      { width: 80px; }
+  .log-entry .log-text { font-size: 11px; }
+}
+
+@media (max-width: 600px) {
+  .top-bar { width: 96%; padding: 8px 10px; }
+  .stat-item .stat-label { font-size: 12px; }
+  .logo-wrap .logo-long  { height: 42px; }
+
+  .battle-content {
+    width: 100%;
+    height: calc(100vh - 58px);
+    border-radius: 0;
+    flex-direction: column;
+  }
+
+  // Сайдбар → горизонтальная шапка
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    padding: 7px 10px;
+    border-right: none;
+    border-bottom: 1px solid rgba(200,184,162,0.4);
+    flex-shrink: 0;
+    gap: 8px;
+  }
+
+  .boss-title-block { margin-bottom: 0; flex-shrink: 0; }
+  .boss-title-block .section-label { font-size: 13px; }
+  .players-section  { flex: 1; overflow: hidden; }
+  .players-list     { flex-direction: row; flex-wrap: wrap; gap: 4px; }
+  .player-item      { font-size: 11px; }
+  .sidebar-footer   { display: none; }
+
+  // Чат
+  .chat-panel { border-right: none; }
+  .boss-header { flex-direction: column; align-items: flex-start; gap: 5px; padding: 7px 10px; }
+  .boss-header-right { width: 100%; justify-content: space-between; }
+  .boss-mission-label { font-size: 12px; }
+  .boss-name-label    { font-size: 13px; letter-spacing: 1px; }
+  .boss-hp-bar        { width: 80px; }
+  .chat-messages      { margin: 0 8px; }
+  .chat-input-row     { margin: 6px 8px 8px; }
+  .chat-message .msg-author { font-size: 11px; }
+  .chat-message .msg-text   { font-size: 12px; }
+
+  // Баттл-лог → горизонтальная полоска снизу
+  .battle-log-panel {
+    width: 100%;
+    height: 130px;
+    border-top: 1px solid rgba(200,184,162,0.4);
+    flex-shrink: 0;
+  }
+
+  .log-header { padding: 6px 10px; }
+  .log-title  { font-size: 13px; }
+  .log-entry .log-text { font-size: 11px; }
+}

@@ -17,17 +17,20 @@ $scrollbar:      #c8b8a2;
   align-items: center;
   justify-content: center;
   font-family: 'Cinzel', 'Palatino Linotype', serif;
+
   overflow: hidden;
 }
 
-/* фон слой */
 .inv-wrapper::before {
   content: '';
   position: absolute;
   inset: 0;
+
   background: url('/images/invbg.jpg') center/cover no-repeat;
-  filter: blur(3px);
+
+  filter: blur(4px);
   transform: scale(1.1);
+
   z-index: -1;
 }
 
@@ -336,4 +339,166 @@ $scrollbar:      #c8b8a2;
 // Подсветка строки при ховере
 .table-row {
   cursor: context-menu;
+}
+
+.ctx-item-meta {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 14px 6px;
+  font-size: 11px;
+  color: #999;
+  font-family: sans-serif;
+}
+.ctx-dot { color: #ddd; }
+
+.ctx-btn.ctx-equip {
+  color: #74975A;
+  &:hover { background: rgba(116,151,90,0.08); }
+}
+.ctx-btn.ctx-unequip {
+  color: #828AD0;
+  &:hover { background: rgba(130,138,208,0.08); }
+}
+
+// Equipped row highlight
+.table-row.row-equipped {
+  background: rgba(116, 151, 90, 0.07) !important;
+  border-left: 3px solid #74975A;
+  padding-left: 9px;
+}
+
+// Error toast
+.error-toast {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(200,50,50,0.92);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-family: sans-serif;
+  font-size: 13px;
+  z-index: 999;
+  animation: toastIn 0.2s ease-out;
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(8px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+// ════════════════════════════════════════════════
+//  MOBILE ≤ 400px
+// ════════════════════════════════════════════════
+@media (max-width: 400px) {
+  .inv-wrapper { justify-content: flex-start; padding-top: 8px; }
+
+  .top-bar {
+    width: 100%;
+    padding: 8px 10px 6px;
+  }
+
+  .char-stats {
+    padding: 4px 7px;
+    max-width: calc(100vw - 72px);
+    overflow: hidden;
+  }
+
+  .stat-item {
+    padding: 0 4px;
+    .stat-label { font-size: 10px; }
+  }
+
+  .stat-divider { height: 12px; }
+  .logo-wrap .logo-long { height: 34px; }
+
+  .inv-panel {
+    width: 100%;
+    height: calc(100vh - 54px);
+    border-radius: 0;
+    padding: 14px 10px 10px;
+  }
+
+  .panel-title { font-size: 20px; letter-spacing: 1px; }
+
+  .home-btn {
+    padding: 6px 10px;
+    font-size: 10px;
+    span:not(.home-icon):not(.home-house) { display: none; }
+    .home-house { font-size: 16px; }
+    .home-icon  { font-size: 16px; }
+  }
+
+  // Скрываем часть колонок — оставляем только Item, Rarity, Equipped
+  .table-head,
+  .table-row {
+    grid-template-columns: 1fr 0.8fr 0.5fr;
+  }
+
+  .col-type,
+  .col-dice,
+  .col-qty { display: none; }
+
+  .col-item .item-name { font-size: 12px; }
+  .col-item .item-icon { font-size: 14px; }
+
+  .type-badge  { font-size: 10px; padding: 1px 5px; }
+  .rarity-badge { font-size: 10px; padding: 1px 5px; }
+
+  .table-head > div { font-size: 10px; letter-spacing: 0.5px; }
+
+  .ctx-menu { min-width: 160px; }
+}
+
+// ════════════════════════════════════════════════
+//  TABLET 800px → 450px
+// ════════════════════════════════════════════════
+@media (max-width: 800px) {
+  .top-bar { width: 90%; padding: 10px 16px 8px; }
+  .stat-item .stat-label { font-size: 15px; }
+  .logo-wrap .logo-long  { height: 56px; }
+  .inv-panel { width: 90%; height: 520px; }
+  .panel-title { font-size: 22px; }
+
+  .table-head,
+  .table-row {
+    grid-template-columns: 2fr 0.7fr 0.9fr 0.7fr 0.4fr 0.6fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .top-bar { width: 96%; padding: 8px 10px; }
+  .stat-item .stat-label { font-size: 12px; }
+  .logo-wrap .logo-long  { height: 42px; }
+
+  .inv-panel {
+    width: 100%;
+    height: calc(100vh - 58px);
+    border-radius: 0;
+    padding: 12px 10px;
+  }
+
+  .panel-title { font-size: 18px; }
+
+  .home-btn {
+    padding: 6px 10px;
+    font-size: 11px;
+    .home-icon  { font-size: 16px; }
+    .home-house { font-size: 15px; }
+  }
+
+  // Скрываем Dice и Qty
+  .table-head,
+  .table-row {
+    grid-template-columns: 1.6fr 0.7fr 0.9fr 0.5fr;
+  }
+
+  .col-dice,
+  .col-qty { display: none; }
+
+  .col-item .item-name { font-size: 12px; }
+  .table-head > div    { font-size: 10px; }
+  .rarity-badge        { font-size: 10px; padding: 1px 5px; }
 }

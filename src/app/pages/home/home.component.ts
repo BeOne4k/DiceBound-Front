@@ -17,11 +17,11 @@ export class HomeComponent implements OnInit {
   loadingMissions = true;
 
   news = [
-    { title: 'NEW BOSS: RAGNAROK', description: '1 boss is never enough. Enjoy the pain, chaos.' },
-    { title: 'LMAO NEW BOSS ADDED 2', description: 'Laugh through your suffering, adventurer.' },
-    { title: 'SKAONIA FUCKED UP', description: 'Ponol habiti' },
-    { title: 'LMAO NEW BOSS ADDED 3', description: '2 bosses is not enough aswell, scrol.' },
-    { title: 'NEW BOSS ADDED 4 LMAO', description: 'Just when you thought it was over.' },
+    { title: 'NEW BOSS ADDED', description: '1 boss is never enough. Enjoy the pain, chaos.' },
+    { title: 'MINOR PATCH', description: 'Some small style changes.' },
+    { title: 'DICEBOUND NOW CAN BE PLAYED ON MOBILE!', description: 'We added responsive to our site.' },
+    { title: 'NEW MISSION ADDED', description: 'Have fun completing this.' },
+    { title: 'ADDED ITEMS', description: 'You can now get items from missions in your inventory.' },
     { title: 'PATCH 1.3 DEPLOYED', description: 'Fixed balance issues with fire elementals.' },
     { title: 'TAVERN UPDATE', description: 'New drinks and quests available at the tavern.' },
   ];

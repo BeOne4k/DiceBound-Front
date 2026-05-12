@@ -331,18 +331,140 @@ $scrollbar-thumb:    #c8b8a2;
 
 .char-stats {
   .stat-item:nth-child(1) .stat-label {
-    color: #74975A; // имя — зелёный
+    color: #74975A // имя — зелёный
   }
 
   .stat-item:nth-child(3) .stat-label {
-    color: #D8A326; // уровень — жёлтый
+    color: #D8A326;// уровень — жёлтый
   }
 
   .stat-item:nth-child(5) .stat-label {
     color: #F76C6C; // HP — красный
   }
-
     .stat-item:nth-child(7) .stat-label {
     color: #828AD0; // HP — красный
   }
+}
+// ════════════════════════════════════════════════
+//  MOBILE ≤ 400px
+// ════════════════════════════════════════════════
+@media (max-width: 400px) {
+  .tavern-wrapper { justify-content: flex-start; padding-top: 8px; }
+
+  .top-bar {
+    width: 100%;
+    padding: 8px 10px 6px;
+  }
+
+  .char-stats {
+    padding: 4px 7px;
+    max-width: calc(100vw - 72px);
+    overflow: hidden;
+  }
+
+  .stat-item {
+    padding: 0 4px;
+    .stat-label { font-size: 10px; }
+  }
+
+  .stat-divider { height: 12px; }
+  .logo-wrap .logo-long { height: 34px; }
+
+  .tavern-content {
+    width: 100%;
+    height: calc(100vh - 54px);
+    border-radius: 0;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px 12px;
+    border-right: none;
+    border-bottom: 1px solid rgba(200,184,162,0.4);
+    flex-shrink: 0;
+  }
+
+  .tavern-title { margin-bottom: 0; margin-right: 12px; flex-shrink: 0; }
+  .tavern-title .tavern-label { font-size: 16px; }
+  .tavern-title .tavern-icon { font-size: 16px; }
+
+  .visitors-section {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  .visitors-heading { display: none; }
+
+  .visitors-list {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .visitor-item { font-size: 11px; }
+
+  .sidebar-footer { display: none; }
+
+  .chat-panel { padding: 8px 10px 10px; flex: 1; }
+
+  .chat-message {
+    .msg-author { font-size: 11px; }
+    .msg-text   { font-size: 13px; }
+  }
+
+  .chat-input { font-size: 13px; }
+}
+
+// ════════════════════════════════════════════════
+//  TABLET 800px → 450px
+// ════════════════════════════════════════════════
+@media (max-width: 800px) {
+  .top-bar { width: 90%; padding: 10px 16px 8px; }
+  .stat-item .stat-label { font-size: 15px; }
+  .logo-wrap .logo-long  { height: 56px; }
+  .tavern-content { width: 90%; height: 560px; }
+  .sidebar { width: 170px; }
+  .tavern-title .tavern-label { font-size: 20px; }
+  .chat-message .msg-text { font-size: 13px; }
+}
+
+@media (max-width: 600px) {
+  .top-bar { width: 96%; padding: 8px 10px; }
+  .stat-item .stat-label { font-size: 12px; }
+  .logo-wrap .logo-long  { height: 42px; }
+
+  .tavern-content {
+    width: 100%;
+    height: calc(100vh - 58px);
+    border-radius: 0;
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    padding: 8px 12px;
+    border-right: none;
+    border-bottom: 1px solid rgba(200,184,162,0.4);
+    flex-shrink: 0;
+    gap: 8px;
+  }
+
+  .tavern-title { margin-bottom: 0; flex-shrink: 0; }
+  .tavern-title .tavern-label { font-size: 16px; }
+  .tavern-title .tavern-icon  { font-size: 16px; }
+  .visitors-heading { display: none; }
+  .visitors-list    { flex-direction: row; flex-wrap: wrap; gap: 4px; }
+  .visitor-item     { font-size: 11px; }
+  .sidebar-footer   { display: none; }
+
+  .chat-panel { padding: 8px 10px 10px; }
+  .chat-message .msg-author { font-size: 11px; }
+  .chat-message .msg-text   { font-size: 13px; }
 }

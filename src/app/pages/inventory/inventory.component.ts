@@ -98,6 +98,60 @@ export class InventoryComponent implements OnInit {
     this.ctxVisible = true;
   }
 
+  equipItem(): void {
+    this.performEquipAction('equip');
+  }
+
+  unequipItem(): void {
+    this.performEquipAction('unequip');
+  }
+
+  private performEquipAction(action: 'equip' | 'unequip'): void {
+    if (!this.ctxItem) return;
+    this.ctxVisible = false;
+
+    const charId    = this.character?.id || this.character?.Id;
+    const invItemId = this.ctxItem.id    || this.ctxItem.Id;
+    const token     = localStorage.getItem('token');
+    const headers   = token ? new HttpHeaders({ Authorization: `Bearer ${token}` }) : undefined;
+
+    this.http.post<any>(
+      `${environment.apiUrl}/Characters/${charId}/inventory/${invItemId}/${action}`,
+      {},
+      { headers }
+    ).subscribe({
+      next: () => {
+        // Обновляем локально
+        const item = this.items.find(i => (i.id || i.Id) === invItemId);
+        if (item) item.isEquipped = action === 'equip';
+        // Обновляем персонажа из API
+        this.refreshCharacter();
+      },
+      error: (err) => {
+        this.error = err?.error || `Failed to ${action} item`;
+        setTimeout(() => this.error = null, 3000);
+      }
+    });
+  }
+
+  private refreshCharacter(): void {
+    const charId = this.character?.id || this.character?.Id;
+    const token  = localStorage.getItem('token');
+    if (!token || !charId) return;
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    this.http.get<any>(`${environment.apiUrl}/Characters/${charId}`, { headers }).subscribe({
+      next: (char) => {
+        const race = char.raceName || char.RaceName || this.charRace;
+        char.raceName = race;
+        localStorage.setItem('selectedCharacter', JSON.stringify(char));
+        this.character = char;
+        this.charHp    = char.hp    || char.HP    || this.charHp;
+        this.charMaxHp = char.hp    || char.HP    || this.charMaxHp;
+        this.charLevel = char.level || char.Level || this.charLevel;
+      }
+    });
+  }
+
   deleteItem(): void {
     if (!this.ctxItem) return;
     this.ctxVisible = false;
@@ -122,6 +176,14 @@ export class InventoryComponent implements OnInit {
     return 'rarity-' + (rarity || 'Common').toLowerCase();
   }
 
+  getTypeIcon(type: string): string {
+    const map: Record<string, string> = {
+      Weapon: '⚔️',
+      Armor: '🛡️',
+      Accessory: '💍'
+    };
+    return map[type] || '📦';
+  }
 
   getModifierLabel(modifier: number): string {
     if (!modifier) return '';

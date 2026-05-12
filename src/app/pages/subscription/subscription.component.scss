@@ -239,3 +239,42 @@ $green-light: #a0c078;
 
   &:hover { color: $green-dark; }
 }
+
+// ════════════════════════════════════════════════
+//  MOBILE ≤ 400px
+// ════════════════════════════════════════════════
+@media (max-width: 400px) {
+  .sub-card {
+    width: calc(100vw - 24px);
+    padding: 24px 16px 20px;
+    border-radius: 16px;
+  }
+
+  .logo { height: 48px; margin-bottom: 14px; }
+
+  .form-title { font-size: 17px; letter-spacing: 1px; }
+  .form-desc  { font-size: 12px; }
+
+  .field-input { padding: 9px 10px; font-size: 13px; }
+  .field-label { font-size: 10px; }
+
+  .subscribe-btn { font-size: 13px; letter-spacing: 1.5px; padding: 12px; }
+}
+
+// ════════════════════════════════════════════════
+//  TABLET 800px → 450px
+// ════════════════════════════════════════════════
+@media (max-width: 800px) {
+  .sub-card { width: 400px; }
+}
+
+@media (max-width: 600px) {
+  .sub-card {
+    width: calc(100vw - 32px);
+    padding: 26px 18px 22px;
+  }
+  .logo       { height: 52px; }
+  .form-title { font-size: 17px; }
+  .form-desc  { font-size: 12px; }
+  .field-input { font-size: 13px; padding: 9px 10px; }
+}
