@@ -328,7 +328,7 @@ export class MissionBattleComponent implements OnInit, OnDestroy, AfterViewCheck
         const qty = r.quantity || r.Quantity || 1;
         return qty > 1 ? `${name} x${qty}` : name;
       }).join(', ');
-      victoryMsg += ` 🎁 Items: ${itemNames}`;
+      victoryMsg += ` Items: ${itemNames}`;
     }
 
     this.addSystemMessage(victoryMsg);

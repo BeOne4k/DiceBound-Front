@@ -36,7 +36,6 @@
     <aside class="sidebar">
       <div class="boss-title-block">
         <span class="section-label">Boss Battle</span>
-        <span class="boss-sword">✕</span>
       </div>
 
       <div class="players-section">
@@ -88,9 +87,7 @@
 
       <!-- Victory banner -->
       <div class="victory-banner" *ngIf="battleFinished && isWin && !isDead">
-        <span class="victory-icon">⚔️</span>
         <span class="victory-text">VICTORY! +{{ gainedXp }} XP</span>
-        <span class="victory-icon">⚔️</span>
       </div>
 
       <!-- Loading state -->
