@@ -320,7 +320,7 @@ export class MissionBattleComponent implements OnInit, OnDestroy, AfterViewCheck
   handleVictory(): void {
     const rewardItems: any[] = this.combatResult?.rewardItems || this.combatResult?.RewardItems || [];
 
-    let victoryMsg = `⚔️ ${this.character.name || this.character.Name} defeated ${this.boss?.name || this.boss?.Name || 'the enemy'}! Gained ${this.gainedXp} XP!`;
+    let victoryMsg = ` ${this.character.name || this.character.Name} defeated ${this.boss?.name || this.boss?.Name || 'the enemy'}! Gained ${this.gainedXp} XP!`;
 
     if (rewardItems.length > 0) {
       const itemNames = rewardItems.map((r: any) => {
