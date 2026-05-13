@@ -9,26 +9,28 @@ export class TavernSignalRService {
   messages: { user: string, text: string }[] = [];
   users: string[] = [];
 
-    startConnection(): Promise<void> {
+  startConnection(): Promise<void> {
     this.hubConnection = new signalR.HubConnectionBuilder()
-        .withUrl('https://unsworn-cover-reply.ngrok-free.app/tavernHub')
-        .withAutomaticReconnect()
-        .build();
+      .withUrl('https://unsworn-cover-reply.ngrok-free.app/tavernHub', {
+        headers: { 'ngrok-skip-browser-warning': 'true' }
+      })
+      .withAutomaticReconnect()
+      .build();
 
     this.hubConnection.on('ReceiveMessage', (user, message) => {
-        this.messages.push({ user, text: message });
+      this.messages.push({ user, text: message });
     });
 
     this.hubConnection.on('UserJoined', (user) => {
-        if (!this.users.includes(user)) this.users.push(user);
+      if (!this.users.includes(user)) this.users.push(user);
     });
 
     this.hubConnection.on('UserLeft', (user) => {
-        this.users = this.users.filter(u => u !== user);
+      this.users = this.users.filter(u => u !== user);
     });
 
     return this.hubConnection.start();
-    }
+  }
 
   sendMessage(user: string, message: string) {
     this.hubConnection.invoke('SendMessage', user, message);

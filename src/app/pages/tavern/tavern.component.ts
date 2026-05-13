@@ -1,6 +1,5 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { TavernSignalRService } from 'src/app/core/services/tavern-signalr.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -16,43 +15,58 @@ interface ChatMessage {
   styleUrls: ['./tavern.component.scss'],
   imports: [CommonModule, FormsModule]
 })
-export class TavernComponent implements OnInit, OnDestroy {
+export class TavernComponent implements OnInit {
 
   character: any;
   inputText = '';
 
-  // 👇 ЭТИ ДОЛЖНЫ БЫТЬ, ИНАЧЕ HTML ЛОМАЕТСЯ
-  users: string[] = [];
   messages: ChatMessage[] = [];
 
-  constructor(
-    public signalR: TavernSignalRService,
-    private router: Router
-  ) {}
+  constructor(private router: Router) {}
 
-  async ngOnInit() {
-    const saved = localStorage.getItem('selectedCharacter');
+    users: string[] = [];
 
-    if (!saved) {
-      this.router.navigate(['/characters']);
-      return;
-    }
+ngOnInit() {
+  const savedCharacter = localStorage.getItem('selectedCharacter');
 
-    this.character = JSON.parse(saved);
-
-    await this.signalR.startConnection();
-    await this.signalR.join(this.character.name);
+  if (!savedCharacter) {
+    this.router.navigate(['/characters']);
+    return;
   }
+
+  this.character = JSON.parse(savedCharacter);
+
+  this.users = [this.character.name];
+
+  const savedMessages = localStorage.getItem('tavernMessages');
+
+  if (savedMessages) {
+    this.messages = JSON.parse(savedMessages);
+  }
+}
 
   sendMessage() {
     if (!this.inputText.trim()) return;
 
-    this.signalR.sendMessage(
-      this.character.name,
-      this.inputText
+    const newMessage: ChatMessage = {
+      user: this.character.name,
+      text: this.inputText
+    };
+
+    this.messages.push(newMessage);
+
+    // сохраняем
+    localStorage.setItem(
+      'tavernMessages',
+      JSON.stringify(this.messages)
     );
 
     this.inputText = '';
+  }
+
+  clearChat() {
+    this.messages = [];
+    localStorage.removeItem('tavernMessages');
   }
 
   goBackToCharacters() {
@@ -63,7 +77,5 @@ export class TavernComponent implements OnInit, OnDestroy {
     this.router.navigate(['/home']);
   }
 
-  ngOnDestroy() {
-    this.signalR.leave(this.character?.name);
-  }
+
 }
