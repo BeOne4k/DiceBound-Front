@@ -176,15 +176,6 @@ export class InventoryComponent implements OnInit {
     return 'rarity-' + (rarity || 'Common').toLowerCase();
   }
 
-  getTypeIcon(type: string): string {
-    const map: Record<string, string> = {
-      Weapon: '⚔️',
-      Armor: '🛡️',
-      Accessory: '💍'
-    };
-    return map[type] || '📦';
-  }
-
   getModifierLabel(modifier: number): string {
     if (!modifier) return '';
     return modifier > 0 ? `+${modifier}` : `${modifier}`;

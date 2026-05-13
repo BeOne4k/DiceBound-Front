@@ -1,12 +1,12 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
+import { TavernSignalRService } from 'src/app/core/services/tavern-signalr.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
 
 interface ChatMessage {
-  author: string;
+  user: string;
   text: string;
-  timestamp: number;
 }
 
 @Component({
@@ -16,145 +16,54 @@ interface ChatMessage {
   styleUrls: ['./tavern.component.scss'],
   imports: [CommonModule, FormsModule]
 })
-export class TavernComponent implements OnInit, OnDestroy, AfterViewChecked {
-  @ViewChild('chatBox') chatBox!: ElementRef<HTMLDivElement>;
+export class TavernComponent implements OnInit, OnDestroy {
 
-  character: any = null;
+  character: any;
   inputText = '';
-  visibleMessages: ChatMessage[] = [];
-  visitors: string[] = [];
 
-  private readonly STORAGE_KEY = 'dicebound_tavern_messages';
-  private readonly VISITORS_KEY = 'dicebound_tavern_visitors';
-  private readonly SESSION_TS_KEY = 'dicebound_tavern_join_ts';
-  private readonly MAX_MESSAGES = 200;
-  private readonly PRUNE_AFTER_MS = 60 * 60 * 1000; // 1 hour
+  // 👇 ЭТИ ДОЛЖНЫ БЫТЬ, ИНАЧЕ HTML ЛОМАЕТСЯ
+  users: string[] = [];
+  messages: ChatMessage[] = [];
 
-  private pollInterval: any;
-  private shouldScroll = false;
+  constructor(
+    public signalR: TavernSignalRService,
+    private router: Router
+  ) {}
 
-  constructor(private router: Router) {}
+  async ngOnInit() {
+    const saved = localStorage.getItem('selectedCharacter');
 
-  ngOnInit(): void {
-    const savedChar = localStorage.getItem('selectedCharacter');
-    if (savedChar) {
-      this.character = JSON.parse(savedChar);
-    } else {
+    if (!saved) {
       this.router.navigate(['/characters']);
       return;
     }
 
-    // Mark join time so we only show messages from this point forward
-    const joinTs = Date.now();
-    sessionStorage.setItem(this.SESSION_TS_KEY, String(joinTs));
+    this.character = JSON.parse(saved);
 
-    // Register this visitor
-    this.addVisitor(this.character.name);
-
-    // Load messages that arrived after joining
-    this.refreshMessages();
-
-    // Poll every 2 seconds for new messages
-    this.pollInterval = setInterval(() => this.refreshMessages(), 2000);
+    await this.signalR.startConnection();
+    await this.signalR.join(this.character.name);
   }
 
-  ngOnDestroy(): void {
-    if (this.pollInterval) clearInterval(this.pollInterval);
-    this.removeVisitor(this.character?.name);
+  sendMessage() {
+    if (!this.inputText.trim()) return;
+
+    this.signalR.sendMessage(
+      this.character.name,
+      this.inputText
+    );
+
+    this.inputText = '';
   }
 
-  ngAfterViewChecked(): void {
-    if (this.shouldScroll) {
-      this.scrollToBottom();
-      this.shouldScroll = false;
-    }
-  }
-
-    goBackToCharacters() {
+  goBackToCharacters() {
     this.router.navigate(['/characters']);
   }
 
-  // ── MESSAGES ──────────────────────────────────────
-
-  sendMessage(): void {
-    const text = this.inputText.trim();
-    if (!text) return;
-
-    const msg: ChatMessage = {
-      author: this.character?.name || 'Anonymous',
-      text,
-      timestamp: Date.now()
-    };
-
-    this.saveMessage(msg);
-    this.inputText = '';
-    this.refreshMessages();
-  }
-
-  private saveMessage(msg: ChatMessage): void {
-    const all = this.loadAllMessages();
-    all.push(msg);
-
-    // Prune old messages (older than 1 hour) and cap at MAX_MESSAGES
-    const cutoff = Date.now() - this.PRUNE_AFTER_MS;
-    const pruned = all.filter(m => m.timestamp > cutoff).slice(-this.MAX_MESSAGES);
-
-    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(pruned));
-  }
-
-  private loadAllMessages(): ChatMessage[] {
-    try {
-      const raw = localStorage.getItem(this.STORAGE_KEY);
-      return raw ? JSON.parse(raw) : [];
-    } catch {
-      return [];
-    }
-  }
-
-  private refreshMessages(): void {
-    const joinTs = Number(sessionStorage.getItem(this.SESSION_TS_KEY) || 0);
-    const all = this.loadAllMessages();
-    const fresh = all.filter(m => m.timestamp >= joinTs);
-
-    // Only update + scroll if something changed
-    if (fresh.length !== this.visibleMessages.length) {
-      this.visibleMessages = fresh;
-      this.shouldScroll = true;
-    }
-  }
-
-  private scrollToBottom(): void {
-    if (this.chatBox?.nativeElement) {
-      const el = this.chatBox.nativeElement;
-      el.scrollTop = el.scrollHeight;
-    }
-  }
-
-  // ── VISITORS ──────────────────────────────────────
-
-  private addVisitor(name: string): void {
-    const list = this.loadVisitors();
-    if (!list.includes(name)) list.push(name);
-    localStorage.setItem(this.VISITORS_KEY, JSON.stringify(list));
-    this.visitors = list;
-  }
-
-  private removeVisitor(name: string): void {
-    if (!name) return;
-    const list = this.loadVisitors().filter(v => v !== name);
-    localStorage.setItem(this.VISITORS_KEY, JSON.stringify(list));
-  }
-
-  private loadVisitors(): string[] {
-    try {
-      const raw = localStorage.getItem(this.VISITORS_KEY);
-      return raw ? JSON.parse(raw) : [];
-    } catch {
-      return [];
-    }
-  }
-
-  goHome(): void {
+  goHome() {
     this.router.navigate(['/home']);
+  }
+
+  ngOnDestroy() {
+    this.signalR.leave(this.character?.name);
   }
 }

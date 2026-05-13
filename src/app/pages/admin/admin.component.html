@@ -36,6 +36,9 @@
         <button class="nav-btn" [class.active]="activeTab === 'missions'" (click)="activeTab = 'missions'">Missions
           <span class="nav-count">{{ missions.length }}</span>
         </button>
+        <button class="nav-btn" [class.active]="activeTab === 'races'" (click)="activeTab = 'races'">Races
+          <span class="nav-count">{{ races.length }}</span>
+        </button>
       </nav>
 
       <button class="logout-btn" (click)="logout()">← Logout</button>
@@ -260,6 +263,71 @@
           </ng-container>
 
           <div class="table-empty" *ngIf="missions.length === 0">No missions yet</div>
+        </div>
+      </section>
+
+
+      <!-- ══ RACES TAB ════════════════════════════════ -->
+      <section *ngIf="activeTab === 'races'">
+        <div class="tab-header">
+          <h2 class="tab-title">Races</h2>
+          <button class="add-btn" (click)="showRaceForm = !showRaceForm">
+            {{ showRaceForm ? '✕ Cancel' : '+ Add Race' }}
+          </button>
+        </div>
+
+        <!-- Race form -->
+        <div class="form-card" *ngIf="showRaceForm">
+          <div class="form-grid">
+            <div class="field-group">
+              <label class="field-label">Name *</label>
+              <input class="field-input" type="text" [(ngModel)]="raceForm.name" placeholder="Human" />
+            </div>
+            <div class="field-group">
+            <label>Strength</label>
+            <input type="number" [(ngModel)]="raceForm.baseStrength" />
+          </div>
+
+          <div class="field-group">
+            <label>Dexterity</label>
+            <input type="number" [(ngModel)]="raceForm.baseDexterity" />
+          </div>
+
+          <div class="field-group">
+            <label>Constitution</label>
+            <input type="number" [(ngModel)]="raceForm.baseConstitution" />
+          </div>
+
+          <div class="field-group">
+            <label>Intelligence</label>
+            <input type="number" [(ngModel)]="raceForm.baseIntelligence" />
+          </div>
+          </div>
+          <button class="submit-btn" (click)="createRace()">Create Race</button>
+        </div>
+
+        <!-- Races list -->
+        <div class="list-loading" *ngIf="loadingRaces">Loading...</div>
+        <div class="data-table" *ngIf="!loadingRaces">
+          <div class="table-head row-grid-races">
+            <span>Name</span>
+            <span>STR</span>
+            <span>DEX</span>
+            <span>CON</span>
+            <span>INT</span>
+            <span></span>
+          </div>
+          <div class="table-row row-grid-races" *ngFor="let race of races">
+            <span class="cell-name">{{ getName(race) }}</span>
+            <span class="cell-mono">{{ race.BaseStrenght || race.BaseStrenght  }}</span>
+            <span class="cell-mono">{{ race.BaseDexterity|| race.BaseDexterity}}</span>
+            <span class="cell-mono">{{ race.BaseConstitution || race.BaseConstitution }}</span>
+            <span class="cell-mono">{{ race.BaseIntelligence || race.BaseIntelligence }}</span>
+            <span class="cell-actions">
+              <button class="del-btn" (click)="askDelete('Races', getId(race), getName(race))">🗑</button>
+            </span>
+          </div>
+          <div class="table-empty" *ngIf="races.length === 0">No races yet</div>
         </div>
       </section>
 

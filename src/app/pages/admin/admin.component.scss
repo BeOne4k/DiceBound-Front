@@ -333,6 +333,7 @@ $red:           #c0392b;
 .row-grid-items    { grid-template-columns: 1.8fr 0.7fr 0.8fr 0.7fr 0.5fr 36px; }
 .row-grid-bosses   { grid-template-columns: 1.8fr 0.6fr 0.6fr 0.6fr 0.7fr 36px; }
 .row-grid-missions { grid-template-columns: 1.6fr 0.4fr 0.8fr 0.6fr 0.9fr 0.5fr 36px; }
+.row-grid-races    { grid-template-columns: 1.2fr 2fr 0.5fr 0.5fr 0.5fr 36px; }
 
 .cell-name    { font-family: 'Cinzel', serif; font-size: 13px; font-weight: 700; color: $text; }
 .cell-mono    { font-family: sans-serif; font-size: 12px; color: $text-muted; }
@@ -467,3 +468,10 @@ $red:           #c0392b;
 @keyframes fadeIn  { from { opacity: 0; } to { opacity: 1; } }
 @keyframes fadeUp  { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes toastIn { from { opacity: 0; transform: translateX(-50%) translateY(8px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+.cell-muted {
+  color: $text-muted;
+  font-size: 0.82rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

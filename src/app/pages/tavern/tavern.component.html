@@ -1,32 +1,39 @@
 <div class="tavern-wrapper">
-  <!-- Background -->
   <div class="bg-overlay"></div>
 
-  <!-- Top Bar (same as home) -->
+  <!-- TOP -->
   <header class="top-bar">
-    <div class="char-stats" title="Character stats" (click)="goBackToCharacters()">
+    <div class="char-stats" (click)="goBackToCharacters()">
       <div class="stat-item">
         <span class="stat-label">{{ character?.name }}</span>
       </div>
+
       <div class="stat-divider"></div>
+
       <div class="stat-item">
         <span class="stat-label">Level: {{ character?.level }}</span>
       </div>
+
       <div class="stat-divider"></div>
+
       <div class="stat-item">
-        <span class="stat-label">HP: {{ character?.hp ?? character?.HP ?? '?' }}/{{ character?.hp ?? character?.HP ?? '?' }}</span>
+        <span class="stat-label">
+          HP: {{ character?.hp ?? character?.HP ?? '?' }}
+        </span>
       </div>
+
       <div class="stat-divider"></div>
+
       <div class="stat-item">
-        <span class="stat-label">Race: {{ character?.raceName }}</span>
+        <span class="stat-label">{{ character?.raceName }}</span>
       </div>
     </div>
   </header>
 
-  <!-- Main content -->
+  <!-- MAIN -->
   <main class="tavern-content">
 
-    <!-- Left: visitors + back button -->
+    <!-- LEFT -->
     <aside class="sidebar">
       <div class="tavern-title">
         <span class="tavern-label">Tavern</span>
@@ -34,10 +41,14 @@
 
       <div class="visitors-section">
         <p class="visitors-heading">Current visitors:</p>
+
         <ul class="visitors-list">
-          <li *ngFor="let visitor of visitors" class="visitor-item">
+          <li *ngFor="let user of users" class="visitor-item">
             <span class="visitor-dot"></span>
-            <span [class.visitor-me]="visitor === character?.name">{{ visitor }}</span>
+
+            <span [class.visitor-me]="user === character?.name">
+              {{ user }}
+            </span>
           </li>
         </ul>
       </div>
@@ -50,28 +61,34 @@
       </div>
     </aside>
 
-    <!-- Right: chat -->
+    <!-- CHAT -->
     <section class="chat-panel">
+
       <div class="chat-messages" #chatBox>
-        <div *ngFor="let msg of visibleMessages" class="chat-message">
-          <span class="msg-author">{{ msg.author }}</span>
+
+        <div *ngFor="let msg of messages" class="chat-message">
+          <span class="msg-author">{{ msg.user }}:</span>
           <span class="msg-text">{{ msg.text }}</span>
         </div>
-        <div *ngIf="visibleMessages.length === 0" class="chat-empty">
-          You entered the tavern. Say hello!
+
+        <div *ngIf="messages.length === 0" class="chat-empty">
+          Tavern is empty... say something 
         </div>
+
       </div>
 
       <div class="chat-input-row">
         <input
           class="chat-input"
           [(ngModel)]="inputText"
-          placeholder="|..."
+          placeholder="Type message..."
           (keydown.enter)="sendMessage()"
           maxlength="300"
         />
+
         <button class="send-btn" (click)="sendMessage()">›</button>
       </div>
+
     </section>
 
   </main>

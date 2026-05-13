@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 
-type Tab = 'items' | 'bosses' | 'missions';
+type Tab = 'items' | 'bosses' | 'missions' | 'races';
 
 @Component({
   standalone: true,
@@ -28,10 +28,21 @@ export class AdminComponent implements OnInit {
   items: any[]    = [];
   bosses: any[]   = [];
   missions: any[] = [];
+  races: any[]    = [];
+
+  showRaceForm = false;
+raceForm = {
+  name: '',
+  baseStrength: 10,
+  baseDexterity: 10,
+  baseConstitution: 10,
+  baseIntelligence: 10
+};
 
   loadingItems    = false;
   loadingBosses   = false;
   loadingMissions = false;
+  loadingRaces    = false;
 
   // ── TOAST ─────────────────────────────────────
   toast: { msg: string; type: 'ok' | 'err' } | null = null;
@@ -86,6 +97,7 @@ export class AdminComponent implements OnInit {
     this.loadItems();
     this.loadBosses();
     this.loadMissions();
+    this.loadRaces();
   }
 
   private headers(): HttpHeaders {
@@ -114,6 +126,15 @@ export class AdminComponent implements OnInit {
     this.http.get<any[]>(`${environment.apiUrl}/Missions`, { headers: this.headers() }).subscribe({
       next: r => { this.missions = r; this.loadingMissions = false; },
       error: () => { this.loadingMissions = false; }
+    });
+  }
+
+
+  loadRaces(): void {
+    this.loadingRaces = true;
+    this.http.get<any[]>(`${environment.apiUrl}/Races`, { headers: this.headers() }).subscribe({
+      next: r => { this.races = r; this.loadingRaces = false; },
+      error: () => { this.loadingRaces = false; }
     });
   }
 
@@ -156,6 +177,19 @@ export class AdminComponent implements OnInit {
     });
   }
 
+
+  createRace(): void {
+    if (!this.raceForm.name.trim()) return;
+    this.http.post<any>(`${environment.apiUrl}/Races`, this.raceForm, { headers: this.headers() }).subscribe({
+      next: r => {
+        this.races.unshift(r);
+        this.resetRaceForm();
+        this.showToast('Race created', 'ok');
+      },
+      error: () => this.showToast('Failed to create race', 'err')
+    });
+  }
+
   // ── DELETE ────────────────────────────────────
   askDelete(type: string, id: string, name: string): void {
     this.confirmDelete = { type, id, name };
@@ -170,6 +204,7 @@ export class AdminComponent implements OnInit {
         if (type === 'Items')    this.items    = this.items.filter(x => (x.id||x.Id) !== id);
         if (type === 'Bosses')   this.bosses   = this.bosses.filter(x => (x.id||x.Id) !== id);
         if (type === 'Missions') this.missions = this.missions.filter(x => (x.id||x.Id) !== id);
+        if (type === 'Races')    this.races    = this.races.filter(x => (x.id||x.Id) !== id);
         this.showToast('Deleted', 'ok');
         this.confirmDelete = null;
       },
@@ -218,6 +253,16 @@ export class AdminComponent implements OnInit {
   resetItemForm():    void { this.itemForm    = { name: '', type: 'Weapon', rarity: 'Common', diceCount: 1, diceSides: 6, modifier: 0, img: '' }; this.showItemForm = false; }
   resetBossForm():    void { this.bossForm    = { name: '', requiredLevel: 1, hp: 100, armorClass: 14, xpValue: 100 }; this.showBossForm = false; }
   resetMissionForm(): void { this.missionForm = { name: '', minLevel: 1, difficulty: 1, rewardExperience: 100, bossId: '' }; this.showMissionForm = false; }
+resetRaceForm(): void {
+  this.raceForm = {
+    name: '',
+    baseStrength: 10,
+    baseDexterity: 10,
+    baseConstitution: 10,
+    baseIntelligence: 10
+  };
+  this.showRaceForm = false;
+}
 
   getId(obj: any): string { return obj.id || obj.Id || ''; }
   getName(obj: any): string { return obj.name || obj.Name || ''; }
